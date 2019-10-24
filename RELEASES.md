@@ -1,3 +1,7 @@
+Version 0.6.5 + VW 0.8.2.1 (2019-10-24)
+========================
+ * Add e-Golf startup-time messages to generic fingerprint.
+
 Version 0.6.5 + VW 0.8.2 (2019-10-20)
 ========================
  * Community port only: Panda safety goes fully transparent/stock if EON/OP are offline.
