@@ -152,8 +152,10 @@ class CarState():
     self.brakeLights = bool(gw_cp.vl["ESP_05"]['ESP_Status_Bremsdruck'])
 
     # Update gear and/or clutch position data.
-    can_gear_shifter = int(gw_cp.vl["Getriebe_11"]['GE_Fahrstufe'])
-    self.gearShifter = parse_gear_shifter(can_gear_shifter, self.shifter_values)
+    # FIXME: Temp hack for e-Golf and manual trans support
+    # can_gear_shifter = int(gw_cp.vl["Getriebe_11"]['GE_Fahrstufe'])
+    # self.gearShifter = parse_gear_shifter(can_gear_shifter, self.shifter_values)
+    self.gearShifter = GEAR.drive
 
     # Update door and trunk/hatch lid open status.
     self.doorOpen = any([gw_cp.vl["Gateway_72"]['ZV_FT_offen'],
