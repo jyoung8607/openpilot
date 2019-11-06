@@ -7,10 +7,15 @@ from selfdrive.swaglog import cloudlog
 from panda import Panda, PandaDFU, BASEDIR
 
 
-def update_panda():
+def get_expected_version():
   with open(os.path.join(BASEDIR, "VERSION")) as f:
     repo_version = f.read()
   repo_version += "-EON" if os.path.isfile('/EON') else "-DEV"
+  return repo_version
+
+
+def update_panda():
+  repo_version = get_expected_version()
 
   panda = None
   panda_dfu = None
@@ -45,13 +50,13 @@ def update_panda():
   if panda.bootstub or not current_version.startswith(repo_version):
     cloudlog.info("Panda firmware out of date, update required")
 
-    #signed_fn = os.path.join(BASEDIR, "board", "obj", "panda.bin.signed")
-    #if os.path.exists(signed_fn):
-    #  cloudlog.info("Flashing signed firmware")
-    #  panda.flash(fn=signed_fn)
-    #else:
-    cloudlog.info("Building and flashing unsigned firmware")
-    panda.flash()
+    signed_fn = os.path.join(BASEDIR, "board", "obj", "panda.bin.signed")
+    if os.path.exists(signed_fn):
+      cloudlog.info("Flashing signed firmware")
+      panda.flash(fn=signed_fn)
+    else:
+      cloudlog.info("Building and flashing unsigned firmware")
+      panda.flash()
 
     cloudlog.info("Done flashing")
 

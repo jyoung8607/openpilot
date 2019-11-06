@@ -1,10 +1,13 @@
 import numpy as np
+from cereal import car
 from common.kalman.simple_kalman import KF1D
 from selfdrive.config import Conversions as CV
 from selfdrive.can.parser import CANParser
 from selfdrive.can.can_define import CANDefine
-from selfdrive.car.volkswagen.values import DBC, gra_acc_buttons_dict
+from selfdrive.car.volkswagen.values import DBC, BUTTON_STATES
 from selfdrive.car.volkswagen.carcontroller import CarControllerParams
+
+GEAR = car.CarState.GearShifter
 
 def get_mqb_gateway_can_parser(CP, canbus):
   # this function generates lists for signal, messages and initial values
@@ -27,7 +30,7 @@ def get_mqb_gateway_can_parser(CP, canbus):
     ("ZV_HD_offen", "Gateway_72", 0),             # Trunk or hatch open
     ("BH_Blinker_li", "Gateway_72", 0),           # Left turn signal on
     ("BH_Blinker_re", "Gateway_72", 0),           # Right turn signal on
-#    ("GE_Fahrstufe", "Getriebe_11", 0),           # Auto trans gear selector position
+    ("GE_Fahrstufe", "Getriebe_11", 0),           # Auto trans gear selector position
     ("AB_Gurtschloss_FA", "Airbag_02", 0),        # Seatbelt status, driver
     ("AB_Gurtschloss_BF", "Airbag_02", 0),        # Seatbelt status, passenger
     ("ESP_Fahrer_bremst", "ESP_05", 0),           # Brake pedal pressed
@@ -52,6 +55,7 @@ def get_mqb_gateway_can_parser(CP, canbus):
     ("GRA_Typ_Hauptschalter", "GRA_ACC_01", 0),   # ACC main button type
     ("GRA_Tip_Stufe_2", "GRA_ACC_01", 0),         # unknown related to stalk type
     ("GRA_ButtonTypeInfo", "GRA_ACC_01", 0),      # unknown related to stalk type
+    ("COUNTER", "GRA_ACC_01", 0),                 # GRA_ACC_01 CAN message counter
   ]
 
   checks = [
@@ -63,7 +67,7 @@ def get_mqb_gateway_can_parser(CP, canbus):
     ("ESP_21", 50),       # From J104 ABS/ESP controller
     ("Motor_20", 50),     # From J623 Engine control module
     ("GRA_ACC_01", 33),   # From J??? steering wheel control buttons
-#    ("Getriebe_11", 20),  # From J743 Auto transmission control module
+    ("Getriebe_11", 20),  # From J743 Auto transmission control module
     ("Gateway_72", 10),   # From J533 CAN gateway (aggregated data)
     ("Motor_14", 10),     # From J623 Engine control module
     ("Airbag_02", 5),     # From J234 Airbag control module
@@ -91,18 +95,11 @@ def get_mqb_extended_can_parser(CP, canbus):
 
   return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, canbus.extended)
 
-def parse_gear_shifter(gear,vals):
-  # Return mapping of gearshift position to selected gear. Eco is not a gear
-  # understood by OP at this time, so map it to Drive. For other ports, Sport is
-  # detected by OP as a no entry/soft cancel condition, so be consistent there.
-  # Map Tiptronic (pseudo-manual mode) to Sport since OP doesn't have that either.
-  #
-  # Intention for the other ports was probably to provide consistent gas pedal behavior
-  # for longitudinal use, but VW Bosch ACC provides m/s acceleration requests to the
-  # ECU directly, pre-computed to match the Charisma driving profile as applicable,
-  # so Drive/Sport/Eco don't really figure in to ACC behavior.
-  val_to_capnp = {'P': 'park', 'R': 'reverse', 'N': 'neutral',
-                  'D': 'drive', 'E': 'eco', 'S': 'sport', 'T': 'manumatic'}
+def parse_gear_shifter(gear, vals):
+  # Return mapping of gearshift position to selected gear.
+
+  val_to_capnp = {'P': GEAR.park, 'R': GEAR.reverse, 'N': GEAR.neutral,
+                  'D': GEAR.drive, 'E': GEAR.eco, 'S': GEAR.sport, 'T': GEAR.manumatic}
   try:
     return val_to_capnp[vals[gear]]
   except KeyError:
@@ -115,48 +112,11 @@ class CarState():
     self.car_fingerprint = CP.carFingerprint
     self.can_define = CANDefine(DBC[CP.carFingerprint]['pt'])
 
-    self.wheelSpeedFL, self.wheelSpeedFR, self.wheelSpeedRL, self.wheelSpeedRR = 0, 0, 0, 0
-    self.vEgoRaw, self.vEgo, self.aEgo = 0, 0, 0
-    self.standstill = False
-
-    self.steeringAngle = 0
-    self.steeringRate = 0
-    self.steeringTorque = 0
-    self.steeringPressed = False
-    self.yawRate = 0
-
-    self.gas = 0
-    self.gasPressed = False
-    self.brake = 0
-    self.brakePressed = False
-    self.brakeLights = False
-
     self.shifter_values = self.can_define.dv["Getriebe_11"]['GE_Fahrstufe']
-    self.gearShifter = None
 
-    self.leftBlinker = False
-    self.rightBlinker = False
+    self.buttonStates = BUTTON_STATES.copy()
 
-    self.seatbeltUnlatched = False
-    self.doorOpen = False
-    self.parkingBrakeSet = False
-    self.stabilityControlDisabled = False
-    self.steeringFault = False
-    self.displayMetricUnits = False
-
-    self.clutchPressed = False
-
-    self.accFault, self.accAvailable, self.accEnabled = False, False, False
-    self.accSetSpeed = 0
-
-    self.gra_acc_buttons = gra_acc_buttons_dict.copy()
-    self.gra_typ_hauptschalter = None
-    self.gra_buttontypeinfo = None
-    self.gra_tip_stufe_2 = None
-
-    self.has_auto_trans = False
-
-    # vEgo kalman filter
+    # vEgo Kalman filter
     dt = 0.01
     self.v_ego_kf = KF1D(x0=[[0.], [0.]],
                          A=[[1., dt], [0., 1.]],
@@ -192,13 +152,8 @@ class CarState():
     self.brakeLights = bool(gw_cp.vl["ESP_05"]['ESP_Status_Bremsdruck'])
 
     # Update gear and/or clutch position data.
-    # FIXME: need a real mechanism for detecting has_auto_trans
-    if self.has_auto_trans:
-      can_gear_shifter = int(gw_cp.vl["Getriebe_11"]['GE_Fahrstufe'])
-      self.gearShifter = parse_gear_shifter(can_gear_shifter, self.shifter_values)
-    else:
-      self.gearShifter = 'drive'
-      self.clutchPressed = not gw_cp.vl["Motor_14"]['MO_Kuppl_schalter']
+    can_gear_shifter = int(gw_cp.vl["Getriebe_11"]['GE_Fahrstufe'])
+    self.gearShifter = parse_gear_shifter(can_gear_shifter, self.shifter_values)
 
     # Update door and trunk/hatch lid open status.
     self.doorOpen = any([gw_cp.vl["Gateway_72"]['ZV_FT_offen'],
@@ -243,30 +198,30 @@ class CarState():
     self.accSetSpeed = ex_cp.vl["ACC_02"]['SetSpeed']
     if self.accSetSpeed > 90: self.accSetSpeed = 0
 
-    # Update ACC cruise control buttons
-    self.gra_acc_buttons["main"] = bool(gw_cp.vl["GRA_ACC_01"]['GRA_Hauptschalter'])
-    self.gra_acc_buttons["cancel"] = bool(gw_cp.vl["GRA_ACC_01"]['GRA_Abbrechen'])
-    self.gra_acc_buttons["set"] = bool(gw_cp.vl["GRA_ACC_01"]['GRA_Tip_Setzen'])
-    self.gra_acc_buttons["accel"] = bool(gw_cp.vl["GRA_ACC_01"]['GRA_Tip_Hoch'])
-    self.gra_acc_buttons["decel"] = bool(gw_cp.vl["GRA_ACC_01"]['GRA_Tip_Runter'])
-    self.gra_acc_buttons["resume"] = bool(gw_cp.vl["GRA_ACC_01"]['GRA_Tip_Wiederaufnahme'])
-    self.gra_acc_buttons["timegap"] = bool(gw_cp.vl["GRA_ACC_01"]['GRA_Verstellung_Zeitluecke'])
+    # Update control button states for turn signals and ACC controls.
+    self.buttonStates["leftBlinker"] = bool(gw_cp.vl["Gateway_72"]['BH_Blinker_li'])
+    self.buttonStates["leftBlinker"] = bool(gw_cp.vl["Gateway_72"]['BH_Blinker_re'])
+    self.buttonStates["accelCruise"] = bool(gw_cp.vl["GRA_ACC_01"]['GRA_Tip_Hoch'])
+    self.buttonStates["decelCruise"] = bool(gw_cp.vl["GRA_ACC_01"]['GRA_Tip_Runter'])
+    self.buttonStates["cancel"] = bool(gw_cp.vl["GRA_ACC_01"]['GRA_Abbrechen'])
+    self.buttonStates["setCruise"] = bool(gw_cp.vl["GRA_ACC_01"]['GRA_Tip_Setzen'])
+    self.buttonStates["resumeCruise"] = bool(gw_cp.vl["GRA_ACC_01"]['GRA_Tip_Wiederaufnahme'])
+    self.buttonStates["gapAdjustCruise"] = bool(gw_cp.vl["GRA_ACC_01"]['GRA_Verstellung_Zeitluecke'])
 
     # Read ACC hardware button type configuration info that has to pass thru
     # to the radar. Ends up being different for steering wheel buttons vs
     # third stalk type controls.
-    self.gra_typ_hauptschalter = gw_cp.vl["GRA_ACC_01"]['GRA_Typ_Hauptschalter']
-    self.gra_buttontypeinfo = gw_cp.vl["GRA_ACC_01"]['GRA_ButtonTypeInfo']
-    self.gra_tip_stufe_2 = gw_cp.vl["GRA_ACC_01"]['GRA_Tip_Stufe_2']
+    self.graHauptschalter = gw_cp.vl["GRA_ACC_01"]['GRA_Hauptschalter']
+    self.graTypHauptschalter = gw_cp.vl["GRA_ACC_01"]['GRA_Typ_Hauptschalter']
+    self.graButtonTypeInfo = gw_cp.vl["GRA_ACC_01"]['GRA_ButtonTypeInfo']
+    self.graTipStufe2 = gw_cp.vl["GRA_ACC_01"]['GRA_Tip_Stufe_2']
+    # Pick up the GRA_ACC_01 CAN message counter so we can sync to it for
+    # later cruise-control button spamming.
+    self.graMsgBusCounter = gw_cp.vl["GRA_ACC_01"]['COUNTER']
 
     # Check to make sure the electric power steering rack is configured to
     # accept and respond to HCA_01 messages and has not encountered a fault.
     self.steeringFault = not gw_cp.vl["EPS_01"]["HCA_Ready"]
-
-    # Update turn signal stalk status. This is the driver switch, not the
-    # external lamps.
-    self.leftBlinker = bool(gw_cp.vl["Gateway_72"]['BH_Blinker_li'])
-    self.rightBlinker = bool(gw_cp.vl["Gateway_72"]['BH_Blinker_re'])
 
     # Additional safety checks performed in CarInterface.
     self.parkingBrakeSet = bool(gw_cp.vl["Kombi_01"]['KBI_Handbremse']) # FIXME: need to include an EPB check as well

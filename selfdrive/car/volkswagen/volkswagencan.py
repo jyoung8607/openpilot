@@ -15,9 +15,9 @@ def create_mqb_steering_control(packer, bus, apply_steer, idx, lkas_enabled):
   }
   return packer.make_can_msg("HCA_01", bus, values, idx)
 
-def create_mqb_hud_control(packer, bus, lkas_enabled, hud_alert, leftLaneVisible, rightLaneVisible):
+def create_mqb_hud_control(packer, bus, hca_enabled, steering_pressed, hud_alert, leftLaneVisible, rightLaneVisible):
 
-  if lkas_enabled:
+  if hca_enabled:
     leftlanehud = 3 if leftLaneVisible else 1
     rightlanehud = 3 if rightLaneVisible else 1
   else:
@@ -26,27 +26,27 @@ def create_mqb_hud_control(packer, bus, lkas_enabled, hud_alert, leftLaneVisible
 
   values = {
     "LDW_Unknown": 2, # FIXME: possible speed or attention relationship
-    "Kombi_Lamp_Orange": 1 if lkas_enabled == 0 else 0,
-    "Kombi_Lamp_Green": 1 if lkas_enabled == 1 else 0,
+    "Kombi_Lamp_Orange": 1 if hca_enabled and steering_pressed else 0,
+    "Kombi_Lamp_Green": 1 if hca_enabled and not steering_pressed else 0,
     "Left_Lane_Status": leftlanehud,
     "Right_Lane_Status": rightlanehud,
     "Alert_Message": hud_alert,
   }
   return packer.make_can_msg("LDW_02", bus, values)
 
-def create_mqb_acc_buttons_control(packer, bus, gra_acc_buttons, gra_typ_hauptschalter, gra_buttontypeinfo, gra_tip_stufe_2, idx):
+def create_mqb_acc_buttons_control(packer, bus, buttonStatesToSend, CS, idx):
   values = {
-    "GRA_Hauptschalter": gra_acc_buttons["main"],
-    "GRA_Abbrechen": gra_acc_buttons["cancel"],
-    "GRA_Tip_Setzen": gra_acc_buttons["set"],
-    "GRA_Tip_Hoch": gra_acc_buttons["accel"],
-    "GRA_Tip_Runter": gra_acc_buttons["decel"],
-    "GRA_Tip_Wiederaufnahme": gra_acc_buttons["resume"],
-    "GRA_Verstellung_Zeitluecke": 3 if gra_acc_buttons["timegap"] else 0,
-    "GRA_Typ_Hauptschalter": gra_typ_hauptschalter,
+    "GRA_Hauptschalter": CS.graHauptschalter,
+    "GRA_Abbrechen": buttonStatesToSend["cancel"],
+    "GRA_Tip_Setzen": buttonStatesToSend["setCruise"],
+    "GRA_Tip_Hoch": buttonStatesToSend["accelCruise"],
+    "GRA_Tip_Runter": buttonStatesToSend["decelCruise"],
+    "GRA_Tip_Wiederaufnahme": buttonStatesToSend["resumeCruise"],
+    "GRA_Verstellung_Zeitluecke": 3 if buttonStatesToSend["gapAdjustCruise"] else 0,
+    "GRA_Typ_Hauptschalter": CS.graTypHauptschalter,
     "GRA_Codierung": 2,
-    "GRA_Tip_Stufe_2": gra_tip_stufe_2,
-    "GRA_ButtonTypeInfo": gra_buttontypeinfo
+    "GRA_Tip_Stufe_2": CS.graTipStufe2,
+    "GRA_ButtonTypeInfo": CS.graButtonTypeInfo
   }
 
   return packer.make_can_msg("GRA_ACC_01", bus, values, idx)

@@ -1,28 +1,21 @@
-Version 0.6.5 + VW 0.8.2.1 (2019-10-24)
+Version 0.6.6 (2019-11-05)
 ========================
- * Add e-Golf startup-time messages to generic fingerprint.
-
-Version 0.6.5 + VW 0.8.2 (2019-10-20)
-========================
- * Community port only: Panda safety goes fully transparent/stock if EON/OP are offline.
- * Remove dead/far-future code in preparation for upstreaming.
- * Refactor and move all type casting/scaling to carstate, state tracking to interface.
- * Correct longstanding bug with ABS wheel speed being reversed front to back.
-
-Version 0.6.5 + VW 0.8.0 (2019-10-19)
-========================
- * Synced with Comma upstreamed cereal, OpenDBC, and Panda components.
- * Automated reflash of Panda with final Volkswagen safety model!
- * Panda temporarily being locked to VW safety as soon as EON connects.
- * Simple/unified MQB tuning model, real vehicle auto-ID to return later.
- * Engagement (re)allowed while in Eco drive mode.
- * Latest Comma 0.6.5-devel commits as of 2019-10-17, tweaks lane probabilities.
+ * Volkswagen support thanks to jyoung8607!
+ * Toyota Corolla Hybrid with TSS 2.0 support thanks to u8511049!
+ * Lexus ES with TSS 2.0 support thanks to energee!
+ * Fix GM ignition detection and lock safety mode not required anymore
+ * Log panda firmware and dongle ID thanks to martinl!
+ * New driving model: improve path prediction and lead detection
+ * New driver monitoring model, 4x smaller and running on DSP
+ * Display an alert and don't start openpilot if panda has wrong firmware
+ * Fix bug preventing EON from terminating processes after a drive
+ * Remove support for Toyota giraffe without the 120Ohm resistor
 
 Version 0.6.5 (2019-10-07)
 ========================
  * NEOS update: upgrade to Python3 and new installer!
  * comma Harness support!
- * New driving model: lateral control has lower reliance on lanelines
+ * New driving model: improve path prediction
  * New driver monitoring model: more accurate face and eye detection
  * Redesign offroad screen to display updates and alerts
  * Increase maximum allowed acceleration
@@ -82,7 +75,7 @@ Version 0.6 (2019-07-01)
  * Panda safety code is MISRA compliant and ships with a signed version on release2
  * New NEOS is 500MB smaller and has a reproducible usr/pipenv
  * Lexus ES Hybrid support thanks to wocsor!
- * Improve tuning for supported Toyota with TSS2
+ * Improve tuning for supported Toyota with TSS 2.0
  * Various other stability improvements
 
 Version 0.5.13 (2019-05-31)

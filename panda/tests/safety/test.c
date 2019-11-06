@@ -34,6 +34,22 @@ struct sample_t volkswagen_torque_driver;
 TIM_TypeDef timer;
 TIM_TypeDef *TIM2 = &timer;
 
+// from board_declarations.h
+#define HW_TYPE_UNKNOWN 0U
+#define HW_TYPE_WHITE_PANDA 1U
+#define HW_TYPE_GREY_PANDA 2U
+#define HW_TYPE_BLACK_PANDA 3U
+#define HW_TYPE_PEDAL 4U
+#define HW_TYPE_UNO 5U
+
+// from main_declarations.h
+uint8_t hw_type = HW_TYPE_UNKNOWN;
+
+// from board.h
+bool board_has_relay(void) {
+  return hw_type == HW_TYPE_BLACK_PANDA || hw_type == HW_TYPE_UNO;
+}
+
 // from config.h
 #define MIN(a,b)                                \
   ({ __typeof__ (a) _a = (a);                   \
@@ -52,16 +68,6 @@ TIM_TypeDef *TIM2 = &timer;
 #define GET_BYTE(msg, b) (((int)(b) > 3) ? (((msg)->RDHR >> (8U * ((unsigned int)(b) % 4U))) & 0XFFU) : (((msg)->RDLR >> (8U * (unsigned int)(b))) & 0xFFU))
 #define GET_BYTES_04(msg) ((msg)->RDLR)
 #define GET_BYTES_48(msg) ((msg)->RDHR)
-
-// from board_declarations.h
-#define HW_TYPE_UNKNOWN 0U
-#define HW_TYPE_WHITE_PANDA 1U
-#define HW_TYPE_GREY_PANDA 2U
-#define HW_TYPE_BLACK_PANDA 3U
-#define HW_TYPE_PEDAL 4U
-
-// from main_declarations.h
-uint8_t hw_type = 0U;
 
 #define UNUSED(x) (void)(x)
 
@@ -157,8 +163,8 @@ void set_subaru_torque_driver(int min, int max){
 }
 
 void set_volkswagen_torque_driver(int min, int max){
-  vw_torque_driver.min = min;
-  vw_torque_driver.max = max;
+  volkswagen_torque_driver.min = min;
+  volkswagen_torque_driver.max = max;
 }
 
 int get_chrysler_torque_meas_min(void){
@@ -206,7 +212,7 @@ void set_subaru_rt_torque_last(int t){
 }
 
 void set_volkswagen_rt_torque_last(int t){
-  vw_rt_torque_last = t;
+  volkswagen_rt_torque_last = t;
 }
 
 void set_toyota_desired_torque_last(int t){
@@ -234,7 +240,11 @@ void set_subaru_desired_torque_last(int t){
 }
 
 void set_volkswagen_desired_torque_last(int t){
-  vw_desired_torque_last = t;
+  volkswagen_desired_torque_last = t;
+}
+
+int get_volkswagen_gas_prev(void){
+  return volkswagen_gas_prev;
 }
 
 bool get_honda_moving(void){
@@ -332,11 +342,11 @@ void init_tests_subaru(void){
 
 void init_tests_volkswagen(void){
   init_tests();
-  vw_torque_driver.min = 0;
-  vw_torque_driver.max = 0;
-  vw_desired_torque_last = 0;
-  vw_rt_torque_last = 0;
-  vw_ts_last = 0;
+  volkswagen_torque_driver.min = 0;
+  volkswagen_torque_driver.max = 0;
+  volkswagen_desired_torque_last = 0;
+  volkswagen_rt_torque_last = 0;
+  volkswagen_ts_last = 0;
   set_timer(0);
 }
 
