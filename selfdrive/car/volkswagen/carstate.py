@@ -84,7 +84,9 @@ def get_mqb_extended_can_parser(CP, canbus):
     # sig_name, sig_address, default
     ("ACC_Status_ACC", "ACC_06", 0),                          # ACC engagement status
     ("ACC_Typ", "ACC_06", 0),                                 # ACC type (follow to stop, stop&go)
+    ("ACC_Anhalten", "ACC_06", 0),                            # ACC Paused
     ("SetSpeed", "ACC_02", 0),                                # ACC set speed
+    ("Abstand", "ACC_02", 0),                                 # ACC following distance to car in front
   ]
 
   checks = [
@@ -135,6 +137,8 @@ class CarState():
     self.vEgo = float(v_ego_x[0])
     self.aEgo = float(v_ego_x[1])
     self.standstill = self.vEgoRaw < 0.1
+    self.accPaused = ex_cp.vl["ACC_06"]['ACC_Anhalten']
+    self.accDistance = ex_cp.vl["ACC_02"]['Abstand']
 
     # Update steering angle, rate, yaw rate, and driver input torque. VW send
     # the sign/direction in a separate signal so they must be recombined.
@@ -173,6 +177,7 @@ class CarState():
     self.displayMetricUnits = not gw_cp.vl["Einheiten_01"]["KBI_MFA_v_Einheit_02"]
 
     # Update ACC radar status.
+
     accStatus = ex_cp.vl["ACC_06"]['ACC_Status_ACC']
     if accStatus == 1:
       # ACC okay but disabled

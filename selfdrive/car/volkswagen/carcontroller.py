@@ -20,8 +20,8 @@ class CarController():
     self.hcaEnabledFrameCount = 0
     self.graButtonStatesToSend = None
     self.graMsgSentCount = 0
-    self.graMsgStartFramePrev = 0
     self.graMsgBusCounterPrev = 0
+    self.accDistancePrev = 0
 
   def update(self, enabled, CS, frame, actuators, visual_alert, audible_alert, leftLaneVisible, rightLaneVisible):
     """ Controls thread """
@@ -135,18 +135,31 @@ class CarController():
     #
     # First create any virtual button press event needed by openpilot, to sync
     # stock ACC with OP disengagement, or to auto-resume from stop.
+    if not enabled and CS.accEnabled:
+      # Cancel ACC if it's engaged with OP disengaged.
+      self.graButtonStatesToSend = BUTTON_STATES.copy()
+      self.graButtonStatesToSend["cancel"] = True
+    elif enabled and CS.standstill and CS.accDistance > self.accDistancePrev:
+      # Check if standstill and vehicle in front advanced and send resumeCruise only if ACC is paused.
+      self.graButtonStatesToSend = BUTTON_STATES.copy()
+      # Every frame if it gets in here the standstill is true but the ACC might not be paused anymore
+      # The CS.accPaused should NOT be included in the condition above as it needs to set the resumeCruise
+      # to false is ACC changed state, otherwise the resumeCruise is interpreted as accelCruise causing the
+      # ACC Set speed to increase during Stop&Go
+      self.graButtonStatesToSend["resumeCruise"] = CS.accPaused
 
-    if frame > self.graMsgStartFramePrev + P.GRA_VBP_STEP:
-      if not enabled and CS.accEnabled:
-        # Cancel ACC if it's engaged with OP disengaged.
-        self.graButtonStatesToSend = BUTTON_STATES.copy()
-        self.graButtonStatesToSend["cancel"] = True
-      elif enabled and CS.standstill:
-        # Blip the Resume button if we're engaged at standstill.
-        # FIXME: This is a naive implementation, improve with visiond or radar input.
-        # A subset of MQBs like to "creep" too aggressively with this implementation.
-        self.graButtonStatesToSend = BUTTON_STATES.copy()
-        self.graButtonStatesToSend["resumeCruise"] = True
+    if self.graButtonStatesToSend is not None:
+      # Finally address the scenario when last frame set the resumeCruise to True, but this frame standstill might be
+      # false. The previous condition "CS.standstill and CS.accDistance > self.accDistancePrev"
+      # will evaluate to false causing resumeCruise to remain active. If still sending buttons make sure that resume
+      # is only sent while ACC is paused. Otherwise we will end up sending accelCruise. Every time resume is sent and
+      # standstill, the car enters ACC Ready mode for the next 3 seconds, and will start on its own as soon as clear,
+      # Combine this with current resumeCruise value so we don't set resumeCruise = True here. It can only cancel
+      # early a previously set resumeCruise = True.
+      self.graButtonStatesToSend["resumeCruise"] = (CS.accPaused and self.graButtonStatesToSend["resumeCruise"])
+
+    # keep track of previous distance
+    self.accDistancePrev = CS.accDistance
 
     # OP/Panda can see this message but can't filter it when integrated at the
     # R242 LKAS camera. It could do so if integrated at the J533 gateway, but
@@ -176,8 +189,6 @@ class CarController():
     if CS.graMsgBusCounter != self.graMsgBusCounterPrev:
       self.graMsgBusCounterPrev = CS.graMsgBusCounter
       if self.graButtonStatesToSend is not None:
-        if self.graMsgSentCount == 0:
-          self.graMsgStartFramePrev = frame
         idx = (CS.graMsgBusCounter + 1) % 16
         can_sends.append(volkswagencan.create_mqb_acc_buttons_control(self.packer_gw, canbus.extended, self.graButtonStatesToSend, CS, idx))
         self.graMsgSentCount += 1
