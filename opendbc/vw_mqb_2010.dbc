@@ -34,128 +34,128 @@ NS_ :
 BS_:
 
 BU_: Kessy_MQB Anhaenger_MQB LCM_MQB EPS_MQB BCM_MQB DCC_MQB ESP_MQB Front_Multifunction_Camera_MQB Rear_Radar_MQB Navigation_MQB Front_Radar_MQB Airbag_MQB BAP_Tester_MQB BMS_MQB Gateway_MQB Getriebe_DQ_Hybrid_MQB Getriebe_DQ_MQB LEH_MQB Motor_Diesel_MQB Motor_Hybrid_MQB Motor_Otto_MQB SAK_MQB Waehlhebel_MQB XXX Parkhilfe_MQB HUD_MQB Kombi_MQB Klima_MQB Standheater_MQB
-
-
+		
+														(*Translation from german (Text in brackets is just a guess) / is used when there are multiple guesses or interpretations*)
 BO_ 290 ACC_06: 8 Front_Radar_MQB
  SG_ CHECKSUM : 0|8@1+ (1,0) [0|255] ""  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
  SG_ COUNTER : 8|4@1+ (1,0) [0|15] ""  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ ACC_limitierte_Anfahrdyn : 12|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ ACC_zul_Regelabw_unten : 16|6@1+ (0.024,0) [0|1.512] "Unit_MeterPerSeconSquar"  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ ACC_StartStopp_Info : 22|2@1+ (1,0) [0|3] ""  Motor_Diesel_MQB,Motor_Otto_MQB
- SG_ ACC_Sollbeschleunigung_02 : 24|11@1+ (0.005,-7.22) [-7.22|3.005] "Unit_MeterPerSeconSquar"  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ ACC_zul_Regelabw_oben : 35|5@1+ (0.0625,0) [0|1.9375] "Unit_MeterPerSeconSquar"  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ ACC_neg_Sollbeschl_Grad_02 : 40|8@1+ (0.05,0) [0|12.75] "Unit_MeterPerCubicSecon"  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ ACC_pos_Sollbeschl_Grad_02 : 48|8@1+ (0.05,0) [0|12.75] "Unit_MeterPerCubicSecon"  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ ACC_Anfahren : 56|1@1+ (1,0) [0|1] ""  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ ACC_Anhalten : 57|1@1+ (1,0) [0|1] ""  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
+ SG_ ACC_limitierte_Anfahrdyn : 12|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		*ACC limited acceleration dynamic*) 
+ SG_ ACC_zul_Regelabw_unten : 16|6@1+ (0.024,0) [0|1.512] "Unit_MeterPerSeconSquar"  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		(*ACC allowed deviation down*) 
+ SG_ ACC_StartStopp_Info : 22|2@1+ (1,0) [0|3] ""  Motor_Diesel_MQB,Motor_Otto_MQB																														
+ SG_ ACC_Sollbeschleunigung_02 : 24|11@1+ (0.005,-7.22) [-7.22|3.005] "Unit_MeterPerSeconSquar"  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB	 (*ACC desired acceleration*)
+ SG_ ACC_zul_Regelabw_oben : 35|5@1+ (0.0625,0) [0|1.9375] "Unit_MeterPerSeconSquar"  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		(*ACC allowed deviation up*)
+ SG_ ACC_neg_Sollbeschl_Grad_02 : 40|8@1+ (0.05,0) [0|12.75] "Unit_MeterPerCubicSecon"  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		(*ACC negative desired acceleration degree*)
+ SG_ ACC_pos_Sollbeschl_Grad_02 : 48|8@1+ (0.05,0) [0|12.75] "Unit_MeterPerCubicSecon"  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		(*ACC positive desired acceleration degree*)
+ SG_ ACC_Anfahren : 56|1@1+ (1,0) [0|1] ""  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB			(*ACC start acceleration*)
+ SG_ ACC_Anhalten : 57|1@1+ (1,0) [0|1] ""  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB			(*ACC stopping*)
  SG_ ACC_Typ : 58|2@1+ (1,0) [0|3] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
  SG_ ACC_Status_ACC : 60|3@1+ (1,0) [0|7] ""  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ ACC_Minimale_Bremsung : 63|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
+ SG_ ACC_Minimale_Bremsung : 63|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		(*ACC minimal braking*)
 
 BO_ 279 ACC_10: 8 Front_Radar_MQB
  SG_ CHECKSUM : 0|8@1+ (1,0) [0|255] ""  Airbag_MQB
  SG_ COUNTER : 8|4@1+ (1,0) [0|15] ""  Airbag_MQB
- SG_ AWV1_Anf_Prefill : 16|1@1+ (1,0) [0|1] ""  Airbag_MQB
+ SG_ AWV1_Anf_Prefill : 16|1@1+ (1,0) [0|1] ""  Airbag_MQB		(*(start Acceleration) prefill*)
  SG_ ANB_CM_Info : 17|1@1+ (1,0) [0|1] ""  XXX
- SG_ AWV2_Freigabe : 18|1@1+ (1,0) [0|1] ""  Airbag_MQB
+ SG_ AWV2_Freigabe : 18|1@1+ (1,0) [0|1] ""  Airbag_MQB			(*release*)
  SG_ AWV1_HBA_Param : 19|2@1+ (1,0) [0|3] ""  XXX
- SG_ AWV2_Ruckprofil : 21|3@1+ (1,0) [0|7] ""  XXX
+ SG_ AWV2_Ruckprofil : 21|3@1+ (1,0) [0|7] ""  XXX		(*jerk profile*)
  SG_ AWV2_Priowarnung : 24|1@1+ (1,0) [0|1] ""  XXX
- SG_ ANB_CM_Anforderung : 25|1@1+ (1,0) [0|1] ""  Airbag_MQB
- SG_ ANB_Info_Teilbremsung : 26|1@1+ (1,0) [0|1] ""  XXX
- SG_ ANB_Notfallblinken : 27|1@1+ (1,0) [0|1] ""  XXX
- SG_ ANB_Teilbremsung_Freigabe : 28|1@1+ (1,0) [0|1] ""  Airbag_MQB
- SG_ ANB_Zielbrems_Teilbrems_Verz_Anf : 29|10@1+ (0.024,-20.016) [-20.016|4.536] "Unit_MeterPerSeconSquar"  Airbag_MQB
- SG_ ANB_Zielbremsung_Freigabe : 39|1@1+ (1,0) [0|1] ""  Airbag_MQB
- SG_ AWV_Vorstufe : 40|1@1+ (1,0) [0|1] ""  XXX
- SG_ AWV_Halten : 41|1@1+ (1,0) [0|1] ""  XXX
+ SG_ ANB_CM_Anforderung : 25|1@1+ (1,0) [0|1] ""  Airbag_MQB		(*request*)
+ SG_ ANB_Info_Teilbremsung : 26|1@1+ (1,0) [0|1] ""  XXX		(*Info partial braking*)
+ SG_ ANB_Notfallblinken : 27|1@1+ (1,0) [0|1] ""  XXX		(*emergency flashing*)
+ SG_ ANB_Teilbremsung_Freigabe : 28|1@1+ (1,0) [0|1] ""  Airbag_MQB			(*partial braking release*)
+ SG_ ANB_Zielbrems_Teilbrems_Verz_Anf : 29|10@1+ (0.024,-20.016) [-20.016|4.536] "Unit_MeterPerSeconSquar"  Airbag_MQB		(*goal braking - partial braking - (delayed - start acceleration)*)
+ SG_ ANB_Zielbremsung_Freigabe : 39|1@1+ (1,0) [0|1] ""  Airbag_MQB		(*goal braking release*)
+ SG_ AWV_Vorstufe : 40|1@1+ (1,0) [0|1] ""  XXX		(*preliminary stage*)
+ SG_ AWV_Halten : 41|1@1+ (1,0) [0|1] ""  XXX		(*hold*)
 
 BO_ 64 Airbag_01: 8 Airbag_MQB
  SG_ Airbag_01_CRC : 0|8@1+ (1,0) [0|255] ""  BMS_MQB,Gateway_MQB,LEH_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
  SG_ Airbag_01_BZ : 8|4@1+ (1,0) [0|15] ""  BMS_MQB,Gateway_MQB,LEH_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
  SG_ AB_RGS_Anst : 12|4@1+ (1,0) [0|15] ""  Gateway_MQB
  SG_ AB_Front_Crash : 16|1@1+ (1,0) [0|1] ""  Gateway_MQB
- SG_ AB_Heck_Crash : 17|1@1+ (1,0) [0|1] ""  Gateway_MQB
+ SG_ AB_Heck_Crash : 17|1@1+ (1,0) [0|1] ""  Gateway_MQB		(*rear crash*)
  SG_ AB_SF_Crash : 18|1@1+ (1,0) [0|1] ""  Gateway_MQB
  SG_ AB_SB_Crash : 19|1@1+ (1,0) [0|1] ""  Gateway_MQB
  SG_ AB_Rollover_Crash : 20|1@1+ (1,0) [0|1] ""  Gateway_MQB
  SG_ AB_Crash_Int : 21|3@1+ (1,0) [0|7] ""  BMS_MQB,Gateway_MQB,LEH_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ AB_Lampe : 24|1@1+ (1,0) [0|1] ""  Gateway_MQB
- SG_ AB_Deaktiviert : 25|1@1+ (1,0) [0|1] ""  Gateway_MQB
- SG_ AB_VB_deaktiviert : 26|1@1+ (1,0) [0|1] ""  Gateway_MQB
- SG_ AB_Systemfehler : 27|1@1+ (1,0) [0|1] ""  BMS_MQB,Gateway_MQB,LEH_MQB
+ SG_ AB_Lampe : 24|1@1+ (1,0) [0|1] ""  Gateway_MQB		(*lamp*)
+ SG_ AB_Deaktiviert : 25|1@1+ (1,0) [0|1] ""  Gateway_MQB		(*deactivated*)
+ SG_ AB_VB_deaktiviert : 26|1@1+ (1,0) [0|1] ""  Gateway_MQB		(*deactivated*)
+ SG_ AB_Systemfehler : 27|1@1+ (1,0) [0|1] ""  BMS_MQB,Gateway_MQB,LEH_MQB		(*System error*)
  SG_ AB_Diagnose : 28|1@1+ (1,0) [0|1] ""  Gateway_MQB
- SG_ AB_Stellgliedtest : 29|1@1+ (1,0) [0|1] ""  BMS_MQB,Gateway_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
+ SG_ AB_Stellgliedtest : 29|1@1+ (1,0) [0|1] ""  BMS_MQB,Gateway_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		(*actuator test*)
  SG_ AB_Erh_Auf_VB : 30|2@1+ (1,0) [0|3] ""  Gateway_MQB
- SG_ AB_Gurtwarn_VF : 32|1@1+ (1,0) [0|1] ""  Gateway_MQB
- SG_ AB_Gurtwarn_VB : 33|1@1+ (1,0) [0|1] ""  Gateway_MQB
- SG_ AB_Anzeige_Fussg : 34|2@1+ (1,0) [0|3] ""  Gateway_MQB
- SG_ AB_Texte_AKS : 36|2@1+ (1,0) [0|3] ""  Gateway_MQB
- SG_ AB_PAO_Leuchte_Anf : 38|1@1+ (1,0) [0|1] ""  Gateway_MQB
- SG_ AB_MKB_gueltig : 39|1@1+ (1,0) [0|1] ""  Gateway_MQB
- SG_ AB_MKB_Anforderung : 40|1@1+ (1,0) [0|1] ""  Gateway_MQB
- SG_ AB_Versorgungsspannung : 41|1@1+ (1,0) [0|1] ""  Gateway_MQB
+ SG_ AB_Gurtwarn_VF : 32|1@1+ (1,0) [0|1] ""  Gateway_MQB		(*seatbelt warning*)
+ SG_ AB_Gurtwarn_VB : 33|1@1+ (1,0) [0|1] ""  Gateway_MQB		(*seatbelt warning*)
+ SG_ AB_Anzeige_Fussg : 34|2@1+ (1,0) [0|3] ""  Gateway_MQB		(*display (walking speed)*)
+ SG_ AB_Texte_AKS : 36|2@1+ (1,0) [0|3] ""  Gateway_MQB		(*texts*)
+ SG_ AB_PAO_Leuchte_Anf : 38|1@1+ (1,0) [0|1] ""  Gateway_MQB		(*lamp*)
+ SG_ AB_MKB_gueltig : 39|1@1+ (1,0) [0|1] ""  Gateway_MQB		(*valid*)
+ SG_ AB_MKB_Anforderung : 40|1@1+ (1,0) [0|1] ""  Gateway_MQB		(*request*)
+ SG_ AB_Versorgungsspannung : 41|1@1+ (1,0) [0|1] ""  Gateway_MQB		(*supply voltage*)
 
 BO_ 1312 Airbag_02: 8 Airbag_MQB
- SG_ AB_Belegung_VB : 26|2@1+ (1,0) [0|3] ""  Gateway_MQB
- SG_ AB_Gurtschloss_FA : 40|2@1+ (1,0) [0|3] ""  Gateway_MQB,Motor_Diesel_MQB,Motor_Otto_MQB
- SG_ AB_Gurtschloss_BF : 42|2@1+ (1,0) [0|3] ""  Gateway_MQB
- SG_ AB_Gurtschloss_Reihe2_FA : 44|2@1+ (1,0) [0|3] ""  Gateway_MQB
- SG_ AB_Gurtschloss_Reihe2_MI : 46|2@1+ (1,0) [0|3] ""  Gateway_MQB
- SG_ AB_Gurtschloss_Reihe2_BF : 48|2@1+ (1,0) [0|3] ""  Gateway_MQB
- SG_ AB_Gurtschloss_Reihe3_FA : 50|2@1+ (1,0) [0|3] ""  Gateway_MQB
- SG_ AB_Gurtschloss_Reihe3_MI : 52|2@1+ (1,0) [0|3] ""  Gateway_MQB
- SG_ AB_Gurtschloss_Reihe3_BF : 54|2@1+ (1,0) [0|3] ""  Gateway_MQB
- SG_ AB_Sitzpos_Sens_FA : 56|2@1+ (1,0) [0|3] ""  Gateway_MQB
- SG_ AB_Sitzpos_Sens_BF : 58|2@1+ (1,0) [0|3] ""  Gateway_MQB
+ SG_ AB_Belegung_VB : 26|2@1+ (1,0) [0|3] ""  Gateway_MQB		(*lighting*)
+ SG_ AB_Gurtschloss_FA : 40|2@1+ (1,0) [0|3] ""  Gateway_MQB,Motor_Diesel_MQB,Motor_Otto_MQB		(*seatbelt lock driver*)
+ SG_ AB_Gurtschloss_BF : 42|2@1+ (1,0) [0|3] ""  Gateway_MQB		(*seatbelt lock passenger*)
+ SG_ AB_Gurtschloss_Reihe2_FA : 44|2@1+ (1,0) [0|3] ""  Gateway_MQB		(*seatbelt lock row 2 driver*)
+ SG_ AB_Gurtschloss_Reihe2_MI : 46|2@1+ (1,0) [0|3] ""  Gateway_MQB		(*seatbelt lock row 2 middle*)
+ SG_ AB_Gurtschloss_Reihe2_BF : 48|2@1+ (1,0) [0|3] ""  Gateway_MQB		(*seatbelt lock row 2 passenger*)
+ SG_ AB_Gurtschloss_Reihe3_FA : 50|2@1+ (1,0) [0|3] ""  Gateway_MQB		(*seatbelt lock row 3 driver*)
+ SG_ AB_Gurtschloss_Reihe3_MI : 52|2@1+ (1,0) [0|3] ""  Gateway_MQB		(*seatbelt lock row 3 middle*)
+ SG_ AB_Gurtschloss_Reihe3_BF : 54|2@1+ (1,0) [0|3] ""  Gateway_MQB		(*seatbelt lock row 3 passenger*)
+ SG_ AB_Sitzpos_Sens_FA : 56|2@1+ (1,0) [0|3] ""  Gateway_MQB		(*Seat position sensor driver*)
+ SG_ AB_Sitzpos_Sens_BF : 58|2@1+ (1,0) [0|3] ""  Gateway_MQB		(*Seat position sensor passenger*)
 
 BO_ 65 Airbag_03: 8 Airbag_MQB
  SG_ Airbag_03_CRC : 0|8@1+ (1,0) [0|255] ""  Gateway_MQB
  SG_ Airbag_03_BZ : 8|4@1+ (1,0) [0|15] ""  Gateway_MQB
  SG_ AB_MKB_Safing : 63|1@1+ (1,0) [0|1] ""  Gateway_MQB
 
-BO_ 1633 Anhaenger_01: 8 Anhaenger_MQB
+BO_ 1633 Anhaenger_01: 8 Anhaenger_MQB		(*Trailer*)
  SG_ AAG_BZ : 0|4@1+ (1,0) [0|15] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ AAG_Bremsl_durch_ECD : 5|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ AAG_Anhaenger_abgesteckt : 6|1@1+ (1,0) [0|1] ""  XXX
+ SG_ AAG_Bremsl_durch_ECD : 5|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		(*(braking power/brake line) through ECD*)
+ SG_ AAG_Anhaenger_abgesteckt : 6|1@1+ (1,0) [0|1] ""  XXX		(*trailer disconnected*)
  SG_ AAG_NSL_aktiv : 7|1@1+ (1,0) [0|1] ""  XXX
- SG_ AAG_Anhaenger_erkannt : 8|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ AAG_Blinker_H_aktiv : 9|1@1+ (1,0) [0|1] ""  XXX
- SG_ AAG_Blinker_HL_def : 10|1@1+ (1,0) [0|1] ""  XXX
- SG_ AAG_Blinker_HR_def : 11|1@1+ (1,0) [0|1] ""  XXX
- SG_ AAG_Bremslicht_H_def : 12|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ AAG_Schlusslicht_HL_def : 13|1@1+ (1,0) [0|1] ""  XXX
- SG_ AAG_Schlusslicht_HR_def : 14|1@1+ (1,0) [0|1] ""  XXX
- SG_ AAG_AVS_Fehler_02 : 18|1@1+ (1,0) [0|1] ""  XXX
- SG_ AAG_AVS_Stati : 20|4@1+ (1,0) [0|15] ""  XXX
+ SG_ AAG_Anhaenger_erkannt : 8|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		(*trailer recognized*)
+ SG_ AAG_Blinker_H_aktiv : 9|1@1+ (1,0) [0|1] ""  XXX		(*turn signal (back) active*)
+ SG_ AAG_Blinker_HL_def : 10|1@1+ (1,0) [0|1] ""  XXX		(*turn signal back left*)
+ SG_ AAG_Blinker_HR_def : 11|1@1+ (1,0) [0|1] ""  XXX		(*turn signal back right*)
+ SG_ AAG_Bremslicht_H_def : 12|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		(*brake light (back)*)
+ SG_ AAG_Schlusslicht_HL_def : 13|1@1+ (1,0) [0|1] ""  XXX		(*tail light back left*)
+ SG_ AAG_Schlusslicht_HR_def : 14|1@1+ (1,0) [0|1] ""  XXX		(*tail light back right*)
+ SG_ AAG_AVS_Fehler_02 : 18|1@1+ (1,0) [0|1] ""  XXX		(*error*)
+ SG_ AAG_AVS_Stati : 20|4@1+ (1,0) [0|15] ""  XXX		(*(static/statistic)*)
 
 BO_ 1626 BCM_01: 8 BCM_MQB
- SG_ BCM_Bremsbelag_Sensor : 12|1@1+ (1,0) [0|1] ""  XXX
- SG_ BCM_Bremsfluessigkeit_Sensor : 13|1@1+ (1,0) [0|1] ""  XXX
- SG_ BCM1_Licht_Warn : 14|1@1+ (1,0) [0|1] ""  XXX
- SG_ BCM_Waschwasser_Sensor : 15|1@1+ (1,0) [0|1] ""  XXX
- SG_ BCM_Kuehlmittel_Sensor : 16|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Otto_MQB
- SG_ BCM1_Kl_15_HW_erkannt : 17|1@1+ (1,0) [0|1] ""  XXX
- SG_ BCM_Eis_Offroad_Taste : 18|1@1+ (1,0) [0|1] ""  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Otto_MQB
- SG_ ZZH_Endlage_oben : 19|1@1+ (1,0) [0|1] ""  XXX
- SG_ ZZH_Endlage_unten : 20|1@1+ (1,0) [0|1] ""  XXX
- SG_ ZZH_Endlage_unplausibel : 21|1@1+ (1,0) [0|1] ""  XXX
- SG_ BCM2_EZS_gedrueckt : 22|1@1+ (1,0) [0|1] ""  XXX
- SG_ BCM2_SST_gedrueckt : 23|1@1+ (1,0) [0|1] ""  XXX
- SG_ BCM_Hybrid_StartStopp_Taste : 24|1@1+ (1,0) [0|1] ""  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ BCM1_Warnblink_Taster : 25|1@1+ (1,0) [0|1] ""  XXX
- SG_ BCM1_Valet_Parking_Taster : 26|1@1+ (1,0) [0|1] ""  XXX
- SG_ BCM_Remotestart_Betrieb : 27|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Otto_MQB
- SG_ BCM1_HSK_Taster : 28|1@1+ (1,0) [0|1] ""  XXX
- SG_ BCM1_Heckrollo_Taster : 29|1@1+ (1,0) [0|1] ""  XXX
- SG_ BCM1_Rueckfahrlicht_Schalter : 30|1@1+ (1,0) [0|1] ""  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ BCM1_MH_Schalter : 31|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Otto_MQB
- SG_ BCM1_MH_WIV_Schalter : 32|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ BCM_Eco_Charisma_Taste : 33|1@1+ (1,0) [0|1] ""  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB
- SG_ BCM_Thermomanagement : 34|2@1+ (1,0) [0|3] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ BCM_Thermomanagement_Fehler : 36|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ BCM_Thermomanagement_gueltig : 37|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
- SG_ BCM1_Lichtwarn_Texte : 38|2@1+ (1,0) [0|3] ""  XXX
+ SG_ BCM_Bremsbelag_Sensor : 12|1@1+ (1,0) [0|1] ""  XXX		(*brake lining*)
+ SG_ BCM_Bremsfluessigkeit_Sensor : 13|1@1+ (1,0) [0|1] ""  XXX		(*brake fluid*)
+ SG_ BCM1_Licht_Warn : 14|1@1+ (1,0) [0|1] ""  XXX		(*light warning*)
+ SG_ BCM_Waschwasser_Sensor : 15|1@1+ (1,0) [0|1] ""  XXX		(*cleaning fluid*)
+ SG_ BCM_Kuehlmittel_Sensor : 16|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Otto_MQB		(*coolant*)
+ SG_ BCM1_Kl_15_HW_erkannt : 17|1@1+ (1,0) [0|1] ""  XXX		(*recognized*)
+ SG_ BCM_Eis_Offroad_Taste : 18|1@1+ (1,0) [0|1] ""  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Otto_MQB		(*ice offroad button*)
+ SG_ ZZH_Endlage_oben : 19|1@1+ (1,0) [0|1] ""  XXX		(*final position top*)
+ SG_ ZZH_Endlage_unten : 20|1@1+ (1,0) [0|1] ""  XXX		(*final position bottom*)
+ SG_ ZZH_Endlage_unplausibel : 21|1@1+ (1,0) [0|1] ""  XXX		(*final position unplausible*)
+ SG_ BCM2_EZS_gedrueckt : 22|1@1+ (1,0) [0|1] ""  XXX		(*pressed*)
+ SG_ BCM2_SST_gedrueckt : 23|1@1+ (1,0) [0|1] ""  XXX		(*pressed*)
+ SG_ BCM_Hybrid_StartStopp_Taste : 24|1@1+ (1,0) [0|1] ""  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		(*button*)
+ SG_ BCM1_Warnblink_Taster : 25|1@1+ (1,0) [0|1] ""  XXX		(*hazard light button*)
+ SG_ BCM1_Valet_Parking_Taster : 26|1@1+ (1,0) [0|1] ""  XXX		(*button*)
+ SG_ BCM_Remotestart_Betrieb : 27|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Otto_MQB		(*working*)
+ SG_ BCM1_HSK_Taster : 28|1@1+ (1,0) [0|1] ""  XXX		(*button*)
+ SG_ BCM1_Heckrollo_Taster : 29|1@1+ (1,0) [0|1] ""  XXX		(*rear shade button*)
+ SG_ BCM1_Rueckfahrlicht_Schalter : 30|1@1+ (1,0) [0|1] ""  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB,Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		(*reversing light button*)
+ SG_ BCM1_MH_Schalter : 31|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Otto_MQB		(*switch*)
+ SG_ BCM1_MH_WIV_Schalter : 32|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		(*switch*)
+ SG_ BCM_Eco_Charisma_Taste : 33|1@1+ (1,0) [0|1] ""  Getriebe_DQ_Hybrid_MQB,Getriebe_DQ_MQB		(*button*)
+ SG_ BCM_Thermomanagement : 34|2@1+ (1,0) [0|3] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		(*thermal management*)
+ SG_ BCM_Thermomanagement_Fehler : 36|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		(*thermal management error*)
+ SG_ BCM_Thermomanagement_gueltig : 37|1@1+ (1,0) [0|1] ""  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB		(*thermal management valid*)
+ SG_ BCM1_Lichtwarn_Texte : 38|2@1+ (1,0) [0|3] ""  XXX		(*light warning texts*)
 
 BO_ 869 BEM_05: 8 Gateway_MQB
  SG_ BEM_P_Generator : 16|8@1+ (50,0) [0|12700] "Unit_Watt"  Motor_Diesel_MQB,Motor_Hybrid_MQB,Motor_Otto_MQB
