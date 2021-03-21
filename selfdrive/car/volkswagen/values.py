@@ -173,31 +173,37 @@ FW_VERSIONS = {
   CAR.JETTA_MK7: {
     (Ecu.engine, 0x7e0, None): [
       b'\xf1\x8704E906024B \xf1\x895594',  # 2018 Jetta (DGXA)
+      b'\xf1\x8704E906024L \xf1\x895595',  # 2019 Jetta (DGXA)
       b'\xf1\x8704E906024AK\xf1\x899937',  # 2020 Jetta (DGXA)
       b'\xf1\x875G0906259T \xf1\x890003',  # 2021 Jetta GLI (DKFA)
     ],
     (Ecu.transmission, 0x7e1, None): [
       b'\xf1\x8709S927158R \xf1\x893552',  # 2018 Jetta (AQ300)
+      b'\xf1\x8709S927158R \xf1\x893552',  # 2019 Jetta (AQ300)
       b'\xf1\x8709S927158R \xf1\x893587',  # 2020 Jetta (AQ300)
       b'\xf1\x870GC300020N \xf1\x892803',  # 2021 Jetta GLI (DQ381)
     ],
     (Ecu.srs, 0x715, None): [
       b'\xf1\x875Q0959655AG\xf1\x890336\xf1\x82\02314171231313500314611011630169333463100',  # 2018 Jetta
+      b'\xf1\x875Q0959655AG\xf1\x890336\xf1\x82\x1314171231313500314611011630169333463100',  # 2019 Jetta
       b'\xf1\x875Q0959655BR\xf1\x890403\xf1\x82\02311170031313300314240011150119333433100',  # 2020 Jetta
       b'\xf1\x875Q0959655BM\xf1\x890403\xf1\x82\02314171231313500314643011650169333463100',  # 2021 Jetta GLI
     ],
     (Ecu.eps, 0x712, None): [
       b'\xf1\x875QM909144B \xf1\x891081\xf1\x82\00521A10A01A1',  # 2018 Jetta
+      b'\xf1\x875QM909144B \xf1\x891081\xf1\x82\x0521B00404A1',  # 2019 Jetta
       b'\xf1\x875QM909144C \xf1\x891082\xf1\x82\00521A10A01A1',  # 2020 Jetta
       b'\xf1\x875QN909144B \xf1\x895082\xf1\x82\00571A10A11A1',  # 2021 Jetta GLI
     ],
     (Ecu.fwdRadar, 0x757, None): [
       b'\xf1\x875Q0907572N \xf1\x890681',  # 2018 Jetta
+      b'\xf1\x875Q0907572N \xf1\x890681',  # 2019 Jetta 
       b'\xf1\x875Q0907572R \xf1\x890771',  # 2020 Jetta
       b'\xf1\x875Q0907572R \xf1\x890771',  # 2021 Jetta GLI
     ],
     (Ecu.fwdCamera, 0x74f, None): [
       b'\xf1\x873QD980654  \xf1\x891272\xf1\x82\0041H041119',  # 2018 Jetta
+      b'\xf1\x873QD980654  \xf1\x891272\xf1\x82\x041H041119',  # 2019 Jetta
     ],
   },
   CAR.PASSAT_B8: {
