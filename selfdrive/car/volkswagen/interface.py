@@ -17,6 +17,10 @@ class CarInterface(CarInterfaceBase):
     # Alias Extended CAN parser to PT/CAM parser, based on detected network location
     self.cp_ext = self.cp if CP.networkLocation == NetworkLocation.fwdCamera else self.cp_cam
 
+    self.pqCounter = 0
+    self.wheelGrabbed = False
+    self.pqBypassCounter = 0
+
   @staticmethod
   def compute_gb(accel, speed):
     return float(accel) / 4.0
@@ -202,7 +206,32 @@ class CarInterface(CarInterfaceBase):
         buttonEvents.append(be)
 
     events = self.create_common_events(ret, extra_gears=[GearShifter.eco, GearShifter.sport, GearShifter.manumatic])
+    
+    #PQTIMEBOMB STUFF START
+    #Warning alert for the 6min timebomb found on PQ's
+    ret.stopSteering = False
+    if True: #(self.frame % 100) == 0: # Set this to false/False if you want to turn this feature OFF!
+      self.pqCounter += 1
+      if self.pqCounter >= 330*100: #time in seconds until counter threshold for pqTimebombWarn alert
+        if not self.wheelGrabbed:
+          events.add(EventName.pqTimebombWarn)
+          if self.pqCounter >= 345*100: #time in seconds until pqTimebombTERMINAL
+            events.add(EventName.pqTimebombTERMINAL)
+            if self.pqCounter >= 359*100: #time in seconds until auto bypass
+              self.wheelGrabbed = True
+        if self.wheelGrabbed or ret.steeringPressed:
+          self.wheelGrabbed = True
+          ret.stopSteering = True
+          self.pqBypassCounter += 1
+          if self.pqBypassCounter >= 1.05*100: #time alloted for bypass
+            self.wheelGrabbed = False
+            self.pqCounter = 0
+            self.pqBypassCounter = 0
+            events.add(EventName.pqTimebombBypassed)
+          else:
+            events.add(EventName.pqTimebombBypassing)
 
+    #PQTIMEBOMB STUFF END
     # Vehicle health and operation safety checks
     if self.CS.parkingBrakeSet:
       events.add(EventName.parkBrake)
