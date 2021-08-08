@@ -100,8 +100,8 @@ class CarInterface(CarInterfaceBase):
 
     elif candidate == CAR.PASSAT_NMS:
       # Averages of all A3 Passat NMS
-      ret.mass = 1503 + STD_CARGO_KG
-      ret.wheelbase = 2.80
+      ret.mass = 1715 + STD_CARGO_KG
+      ret.wheelbase = 2.70
       ret.minSteerSpeed = 50 * CV.KPH_TO_MS  # May be lower depending on model-year/EPS FW
 
     elif candidate == CAR.TIGUAN_MK2:
