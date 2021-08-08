@@ -98,7 +98,7 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 1551 + STD_CARGO_KG
       ret.wheelbase = 2.79
 
-elif candidate == CAR.PASSAT_NMS:
+    elif candidate == CAR.PASSAT_NMS:
       # Averages of all A3 Passat NMS
       ret.mass = 1503 + STD_CARGO_KG
       ret.wheelbase = 2.80
