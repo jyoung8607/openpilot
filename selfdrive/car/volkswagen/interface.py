@@ -98,10 +98,10 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 1551 + STD_CARGO_KG
       ret.wheelbase = 2.79
 
-    elif candidate == CAR.PASSAT_NMS:
+elif candidate == CAR.PASSAT_NMS:
       # Averages of all A3 Passat NMS
-      ret.mass = 1715 + STD_CARGO_KG
-      ret.wheelbase = 2.70
+      ret.mass = 1503 + STD_CARGO_KG
+      ret.wheelbase = 2.80
       ret.minSteerSpeed = 50 * CV.KPH_TO_MS  # May be lower depending on model-year/EPS FW
 
     elif candidate == CAR.TIGUAN_MK2:
@@ -158,7 +158,12 @@ class CarInterface(CarInterfaceBase):
       # Averages of all 3V/NP Scala variants
       ret.mass = 1505 + STD_CARGO_KG
       ret.wheelbase = 2.84
-
+      
+    elif candidate == CAR.PASSAT_B6:
+      # R36 variant value
+      ret.mass = 1715 + STD_CARGO_KG
+      ret.wheelbase = 2.70
+      
     ret.centerToFront = ret.wheelbase * 0.45
 
     # TODO: get actual value, for now starting with reasonable value for
