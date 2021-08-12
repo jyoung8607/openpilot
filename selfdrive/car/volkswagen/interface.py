@@ -39,7 +39,12 @@ class CarInterface(CarInterfaceBase):
         ret.transmissionType = TransmissionType.manual
 
       # FIXME: need a powertrain message ID to detect gateway installations
-      ret.networkLocation = NetworkLocation.fwdCamera
+      # ret.networkLocation = NetworkLocation.fwdCamera
+      
+        if 0x1A0 in fingerprint[1] or 0xAE in fingerprint[1]:
+        ret.networkLocation = NetworkLocation.gateway
+      else:
+        ret.networkLocation = NetworkLocation.fwdCamera
 
     else:
       # Set global MQB parameters
