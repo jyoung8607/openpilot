@@ -41,7 +41,7 @@ class CarInterface(CarInterfaceBase):
       # FIXME: need a powertrain message ID to detect gateway installations
       # ret.networkLocation = NetworkLocation.fwdCamera
       
-        if 0x1A0 in fingerprint[1] or 0xAE in fingerprint[1]:
+      if 0x1A0 in fingerprint[1] or 0xAE in fingerprint[1]:
         ret.networkLocation = NetworkLocation.gateway
       else:
         ret.networkLocation = NetworkLocation.fwdCamera
