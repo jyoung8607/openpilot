@@ -59,6 +59,14 @@ class CarController():
         new_steer = int(round(actuators.steer * P.STEER_MAX))
         apply_steer = apply_std_steer_torque_limits(new_steer, self.apply_steer_last, CS.out.steeringTorque, P)
         self.steer_rate_limited = new_steer != apply_steer
+
+        #STUFF FOR PQTIMEBOMB BYPASS
+        if CS.out.stopSteering:
+          apply_steer = 0
+        #end of timebomb stuff
+
+
+
         if apply_steer == 0:
           hcaEnabled = False
           self.hcaEnabledFrameCount = 0

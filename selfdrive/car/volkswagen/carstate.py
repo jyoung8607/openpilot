@@ -249,23 +249,26 @@ class CarState(CarStateBase):
     # TODO: Consume FCW/AEB data from factory radar, if present
 
     # Update ACC radar status.
-    accStatus = ext_cp.vl["ACC_GRA_Anziege"]["ACA_StaACC"]
-    if accStatus == 2:
-      # ACC okay and enabled, but not currently engaged
-      ret.cruiseState.available = True
-      ret.cruiseState.enabled = False
-    elif accStatus in [3, 4, 5]:
-      # ACC okay and enabled, currently engaged and regulating speed (3) or engaged with driver accelerating (4) or overrun (5)
-      # Verify against Motor_2 to keep in lockstep with Panda safety
-      ret.cruiseState.available = True
-      if pt_cp.vl["Motor_2"]["GRA_Status"] in [1, 2]:
-        ret.cruiseState.enabled = True
-      else:
-        ret.cruiseState.enabled = False
-    else:
-      # ACC okay but disabled (1), or a radar visibility or other fault/disruption (6 or 7)
-      ret.cruiseState.available = False
-      ret.cruiseState.enabled = False
+    #accStatus = ext_cp.vl["ACC_GRA_Anziege"]["ACA_StaACC"]
+    #if accStatus == 2:
+    #  # ACC okay and enabled, but not currently engaged
+    #  ret.cruiseState.available = True
+    #  ret.cruiseState.enabled = False
+    #elif accStatus in [3, 4, 5]:
+    #  # ACC okay and enabled, currently engaged and regulating speed (3) or engaged with driver accelerating (4) or overrun (5)
+    #  # Verify against Motor_2 to keep in lockstep with Panda safety
+    #  ret.cruiseState.available = True
+    #  if pt_cp.vl["Motor_2"]["GRA_Status"] in [1, 2]:
+    #    ret.cruiseState.enabled = True
+    #  else:
+    #    ret.cruiseState.enabled = False
+    #else:
+    #  # ACC okay but disabled (1), or a radar visibility or other fault/disruption (6 or 7)
+    #  ret.cruiseState.available = False
+    #  ret.cruiseState.enabled = False
+
+    ret.cruiseState.available = bool(pt_cp.vl["GRA_Neu"]['GRA_Hauptschalt'])
+    ret.cruiseState.enabled = True if pt_cp.vl["Motor_2"]['GRA_Status'] in [1, 2] else False
 
     # Update ACC setpoint. When the setpoint reads as 255, the driver has not
     # yet established an ACC setpoint, so treat it as zero.
