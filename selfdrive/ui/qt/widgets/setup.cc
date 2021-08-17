@@ -91,7 +91,7 @@ PrimeUserWidget::PrimeUserWidget(QWidget* parent) : QWidget(parent) {
   // set up API requests
   std::string dongleId = Params().get("DongleId");
   if (util::is_valid_dongle_id(dongleId)) {
-    std::string url = "https://api.commadotai.com/v1/devices/" + dongleId + "/owner";
+    std::string url = "https://api.retropilot.org.com/v1/devices/" + dongleId + "/owner";
     RequestRepeater *repeater = new RequestRepeater(this, QString::fromStdString(url), "ApiCache_Owner", 6);
     QObject::connect(repeater, &RequestRepeater::receivedResponse, this, &PrimeUserWidget::replyFinished);
   }
@@ -220,7 +220,7 @@ SetupWidget::SetupWidget(QWidget* parent) : QFrame(parent) {
   // set up API requests
   std::string dongleId = Params().get("DongleId");
   if (util::is_valid_dongle_id(dongleId)) {
-    std::string url = "https://api.commadotai.com/v1.1/devices/" + dongleId + "/";
+    std::string url = "https://api.retropilot.org.com/v1.1/devices/" + dongleId + "/";
     RequestRepeater* repeater = new RequestRepeater(this, QString::fromStdString(url), "ApiCache_Device", 5);
 
     QObject::connect(repeater, &RequestRepeater::receivedResponse, this, &SetupWidget::replyFinished);
