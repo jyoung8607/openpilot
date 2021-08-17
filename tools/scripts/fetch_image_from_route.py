@@ -17,7 +17,7 @@ route = sys.argv[1]
 segment = int(sys.argv[2])
 frame = int(sys.argv[3])
 
-url = 'https://api.commadotai.com/v1/route/'+sys.argv[1]+"/files"
+url = 'https://api.retropilot.org.com/v1/route/'+sys.argv[1]+"/files"
 r = requests.get(url, headers={"Authorization": "JWT "+jwt})
 assert r.status_code == 200
 print("got api response")
