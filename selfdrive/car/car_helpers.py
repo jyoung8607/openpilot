@@ -87,7 +87,7 @@ def only_toyota_left(candidate_cars):
 
 # **** for use live only ****
 def fingerprint(logcan, sendcan):
-  fixed_fingerprint = "PASSAT B6"
+  fixed_fingerprint = "VOLKSWAGEN PASSAT B6 and B7"
   skip_fw_query = True
 
   if not fixed_fingerprint and not skip_fw_query:
