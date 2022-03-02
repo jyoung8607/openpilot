@@ -86,7 +86,7 @@
 | Audi      | A3 Sportback e-tron 2017-18     | ACC + Lane Assist | Stock            | 0mph               | 0mph         |
 | Audi      | Q2 2018                         | ACC + Lane Assist | Stock            | 0mph               | 0mph         |
 | Audi      | Q3 2020-21                      | ACC + Lane Assist | Stock            | 0mph               | 0mph         |
-| Audi      | S3 2015                         | ACC + Lane Assist | Stock            | 0mph               | 0mph         |
+| Audi      | S3 2015-17                      | ACC + Lane Assist | Stock            | 0mph               | 0mph         |
 | Cadillac  | Escalade ESV 2016<sup>1</sup>   | ACC + LKAS        | openpilot        | 0mph               | 7mph         |
 | Chevrolet | Volt 2017-18<sup>1</sup>        | Adaptive Cruise   | openpilot        | 0mph               | 7mph         |
 | Chrysler  | Pacifica 2017-18                | Adaptive Cruise   | Stock            | 0mph               | 9mph         |
@@ -123,7 +123,7 @@
 | Kia       | Forte 2018-21                   | SCC + LKAS        | Stock            | 0mph               | 0mph         |
 | Kia       | K5 2021-22                      | SCC + LFA         | Stock            | 0mph               | 0mph         |
 | Kia       | Niro EV 2019-22                 | All               | Stock            | 0mph               | 0mph         |
-| Kia       | Niro Hybrid 2021                | SCC + LKAS        | Stock            | 0mph               | 0mph         |
+| Kia       | Niro Hybrid 2021-22             | SCC + LKAS        | Stock            | 0mph               | 0mph         |
 | Kia       | Niro PHEV 2019                  | SCC + LKAS        | Stock            | 10mph              | 32mph        |
 | Kia       | Optima 2017                     | SCC + LKAS        | Stock            | 0mph               | 32mph        |
 | Kia       | Optima 2019                     | SCC + LKAS        | Stock            | 0mph               | 0mph         |
