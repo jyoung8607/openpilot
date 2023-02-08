@@ -15,7 +15,7 @@ atomicwrites = "^1.4.0"
 casadi = { version = "==3.5.5", markers = "platform_system != 'Darwin'" }
 cffi = "^1.15.1"
 crcmod = "^1.7"
-cryptography = "^37.0.4"
+cryptography = "^39.0.1"
 Cython = "^0.29.30"
 flake8 = "^4.0.1"
 Flask = "^2.1.2"
