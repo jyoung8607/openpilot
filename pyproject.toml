@@ -110,7 +110,7 @@ optional = true
 
 [tool.poetry.group.xx.dependencies]
 aenum = "^3.1.11"
-aiohttp = "^3.8.1"
+aiohttp = "^3.8.5"
 albumentations = "^1.2.1"
 apex = { url = "https://github.com/commaai/apex/releases/download/pytorch1.10.0%2Bcu11.1/apex-0.1-cp38-cp38-linux_x86_64.whl" }
 azure-cli-core = "^2.38.0"
