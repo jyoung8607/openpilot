@@ -16,6 +16,9 @@ Button = namedtuple('Button', ['event_type', 'can_addr', 'can_msg', 'values'])
 class CarControllerParams:
   STEER_MAX = 300  # FIXME: placeholder
 
+  def __init__(self, CP):
+    pass
+
 
 class CANBUS:
   pt = 0

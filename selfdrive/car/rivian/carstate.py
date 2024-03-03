@@ -9,7 +9,7 @@ from openpilot.selfdrive.car.rivian.values import DBC, CANBUS, CarControllerPara
 class CarState(CarStateBase):
   def __init__(self, CP):
     super().__init__(CP)
-    self.CCP = CarControllerParams
+    self.CCP = CarControllerParams(CP)
     can_define = CANDefine(DBC[CP.carFingerprint]["pt"])
     self.shifter_values = can_define.dv["VDM_PropStatus"]["VDM_Prndl_Status"]
 

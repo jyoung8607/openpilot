@@ -10,7 +10,7 @@ LongCtrlState = car.CarControl.Actuators.LongControlState
 class CarController(CarControllerBase):
   def __init__(self, dbc_name, CP, VM):
     self.CP = CP
-    self.CCP = CarControllerParams
+    self.CCP = CarControllerParams(CP)
     self.packer_pt = CANPacker(dbc_name)
 
     self.apply_steer_last = 0
