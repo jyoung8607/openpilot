@@ -14,7 +14,7 @@ class CarInterface(CarInterfaceBase):
     ret.radarUnavailable = True
 
     # Set global Rivian parameters
-    ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.alloutput, 1)]  # FIXME: placeholder for testing
+    ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.allOutput, 1)]  # FIXME: placeholder for development
     #ret.enableBsm = TBD
 
     ret.transmissionType = TransmissionType.automatic
@@ -46,5 +46,5 @@ class CarInterface(CarInterfaceBase):
     return ret
 
   def apply(self, c, now_nanos):
-    new_actuators, can_sends, self.eps_timer_soft_disable_alert = self.CC.update(c, self.CS, now_nanos)
+    new_actuators, can_sends = self.CC.update(c, self.CS, now_nanos)
     return new_actuators, can_sends

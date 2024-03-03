@@ -9,7 +9,7 @@ from openpilot.selfdrive.car.rivian.values import DBC, CANBUS, CarControllerPara
 class CarState(CarStateBase):
   def __init__(self, CP):
     super().__init__(CP)
-    self.CCP = CarControllerParams(CP)
+    self.CCP = CarControllerParams
     can_define = CANDefine(DBC[CP.carFingerprint]["pt"])
     self.shifter_values = can_define.dv["VDM_PropStatus"]["VDM_Prndl_Status"]
 
@@ -26,7 +26,7 @@ class CarState(CarStateBase):
     ret.steeringAngleDeg = adas_cp.vl["SAS_Status"]["SAS_Status_AngleSafe"] * CV.RAD_TO_DEG
     ret.steeringRateDeg = adas_cp.vl["SAS_Status"]["SAS_Status_AngleSpeedSafe"] * CV.RAD_TO_DEG
     ret.steeringTorque = pt_cp.vl["EPAS_SystemStatus"]["EPAS_TorsionBarTorque"]
-    ret.steeringPressed = abs(ret.steeringTorque) > self.CCP.STEER_DRIVER_ALLOWANCE
+    ret.steeringPressed = abs(ret.steeringTorque) > 1.0  # N-m
     ret.yawRate = adas_cp.vl["RCM_IMU_LatAccYaw"]["RCM_IMU_Yaw"]
 
     #ret.steerFaultPermanent = TBD
@@ -35,7 +35,7 @@ class CarState(CarStateBase):
     ret.gas = pt_cp.vl["VDM_PropStatus"]["VDM_AcceleratorPedalPosition"]
     ret.gasPressed = ret.gas > 0
     #ret.brake = TBD, there's a brake torque available but maybe not pressure
-    ret.brakePressed = pt_cp.vl["ESP_AebFb"]["iB_BrakePedalApplied"]
+    ret.brakePressed = bool(pt_cp.vl["ESP_AebFb"]["iB_BrakePedalApplied"])
     #ret.parkingBrake = TBD
 
     ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(pt_cp.vl["VDM_PropStatus"]["VDM_Prndl_Status"], None))
