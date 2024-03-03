@@ -263,7 +263,7 @@ class TestFwFingerprintTiming(unittest.TestCase):
         print(f'get_vin {name} case, query time={self.total_time / self.N} seconds')
 
   def test_fw_query_timing(self):
-    total_ref_time = {1: 8.3, 2: 9.2}
+    total_ref_time = {1: 8.4, 2: 9.3}
     brand_ref_times = {
       1: {
         'gm': 1.0,
@@ -274,6 +274,7 @@ class TestFwFingerprintTiming(unittest.TestCase):
         'hyundai': 1.05,
         'mazda': 0.1,
         'nissan': 0.8,
+        'rivian': 0.1,  # FIXME: not for the real query
         'subaru': 0.45,
         'tesla': 0.2,
         'toyota': 1.6,
