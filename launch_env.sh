@@ -12,3 +12,4 @@ fi
 
 export STAGING_ROOT="/data/safe_staging"
 export FINGERPRINT="RIVIAN R1S"
+export SKIP_FW_QUERY="1"
