@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from cereal import car
 from openpilot.selfdrive.car import dbc_dict, CarSpecs, DbcDict, PlatformConfig, Platforms
 from openpilot.selfdrive.car.docs_definitions import CarHarness, CarInfo, CarParts
+from openpilot.selfdrive.car.fw_query_definitions import FwQueryConfig, Request, StdQueries
 
 Ecu = car.CarParams.Ecu
 NetworkLocation = car.CarParams.NetworkLocation
@@ -39,6 +40,17 @@ class CAR(Platforms):
     RivianCarInfo("Rivian R1S 2023"),
     CarSpecs(mass=3206, wheelbase=3.08, steerRatio=15.0),
   )
+
+
+FW_QUERY_CONFIG = FwQueryConfig(
+  requests=[
+    Request(
+      [StdQueries.TESTER_PRESENT_REQUEST, StdQueries.UDS_VERSION_REQUEST],
+      [StdQueries.TESTER_PRESENT_RESPONSE, StdQueries.UDS_VERSION_RESPONSE],
+      bus=0,
+    ),
+  ],
+)
 
 
 CAR_INFO = CAR.create_carinfo_map()
