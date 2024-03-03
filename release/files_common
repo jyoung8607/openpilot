@@ -110,6 +110,7 @@ selfdrive/car/hyundai/*.py
 selfdrive/car/mazda/*.py
 selfdrive/car/mock/*.py
 selfdrive/car/nissan/*.py
+selfdrive/car/rivian/*.py
 selfdrive/car/subaru/*.py
 selfdrive/car/tesla/*.py
 selfdrive/car/toyota/*.py
@@ -523,6 +524,8 @@ opendbc/mazda_2017.dbc
 
 opendbc/nissan_x_trail_2017_generated.dbc
 opendbc/nissan_leaf_2018_generated.dbc
+
+opendbc/rivian.dbc
 
 opendbc/subaru_global_2017_generated.dbc
 opendbc/subaru_global_2020_hybrid_generated.dbc
