@@ -61,9 +61,11 @@ class CarController:
       elif self.CP.carFingerprint in CUSW_CARS:
         # TODO: Chrysler 200 appears to support asymmetric down to mid-13s, Cherokee not verified yet, model-year variances likely
         # TODO: Consolidate with HIGHER_MIN_STEERING_SPEED cars if we can make engage consistently work at 17.5 m/s
-        if CS.out.vEgo < 16.5:
-          lkas_control_bit = False
-
+        #if CS.out.vEgo < 16.5:
+        #  lkas_control_bit = False
+        # Testing reduced asymmetric
+        if CS.out.vEgo < 13.5: #Starting test at 13.5 per previous comment
+         lkas_control_bit = False
       # EPS faults if LKAS re-enables too quickly
       lkas_control_bit = lkas_control_bit and (self.frame - self.last_lkas_falling_edge > 200)
 
