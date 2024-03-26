@@ -54,9 +54,9 @@ class CarInterface(CarInterfaceBase):
       ret.wheelbase = 2.70
       ret.steerRatio = 17  # TODO: verify against params learner
       #ret.minSteerSpeed = 18.5 # TODO: conservative, need to test
-      ret.minSteerSpeed = 17  # TODO: conservative, need to test, reduced to 13
+      ret.minSteerSpeed = 17  # reduced to 17
       ret.steerActuatorDelay = 0.2
-      #adding PID from Jeep Grand Cherokee
+      #adding PID call and params from Jeep Grand Cherokee
       ret.lateralTuning.init('pid')
       ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[9., 20.], [9., 20.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.15, 0.30], [0.03, 0.05]]
