@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+aww was#!/usr/bin/env python3
 from cereal import car
 from panda import Panda
 from openpilot.selfdrive.car import get_safety_config
@@ -54,7 +54,7 @@ class CarInterface(CarInterfaceBase):
       ret.wheelbase = 2.70
       ret.steerRatio = 17  # TODO: verify against params learner
       #ret.minSteerSpeed = 18.5 # TODO: conservative, need to test
-      ret.minSteerSpeed = 17  # reduced to 17
+      ret.minSteerSpeed = 15  # reduced to 15
       ret.steerActuatorDelay = 0.2
       #adding PID call and params from Jeep Grand Cherokee
       ret.lateralTuning.init('pid')
