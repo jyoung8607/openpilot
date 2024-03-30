@@ -53,9 +53,15 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 1747
       ret.wheelbase = 2.70
       ret.steerRatio = 17  # TODO: verify against params learner
-      ret.minSteerSpeed = 18.5  # TODO: conservative, need to test
+      ret.minSteerSpeed = 17.5  # 19' CHerokee KL Tested, Works
       ret.steerActuatorDelay = 0.2
-      CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning, 1.0, False)
+      #19' Cherokee KL Tested, Works - Enabling PID-based lateral tuning
+            #Disable with intent to enable Lateral PID Tuning with same parameters as other Chryslers
+      ret.lateralTuning.init('pid')
+      ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[9., 20.], [9., 20.]]
+      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.15, 0.30], [0.03, 0.05]]
+      ret.lateralTuning.pid.kf = 0.00007 #Up from 0.00006 - Testing 
+      #CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning, 1.0, False)
 
     elif candidate in (CAR.JEEP_GRAND_CHEROKEE, CAR.JEEP_GRAND_CHEROKEE_2019):
       ret.mass = 1778
