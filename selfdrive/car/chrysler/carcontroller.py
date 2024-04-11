@@ -51,7 +51,7 @@ class CarController:
       # TODO: can we make this more sane? why is it different for all the cars?
       lkas_control_bit = self.lkas_control_bit_prev
       if CS.out.vEgo > self.CP.minSteerSpeed:
-        lkas_control_bit = True
+        lkas_control_bit = False
       elif self.CP.flags & ChryslerFlags.HIGHER_MIN_STEERING_SPEED:
         if CS.out.vEgo < (self.CP.minSteerSpeed - 3.0):
           lkas_control_bit = False
