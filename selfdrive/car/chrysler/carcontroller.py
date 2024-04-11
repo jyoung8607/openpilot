@@ -51,7 +51,7 @@ class CarController:
       # TODO: can we make this more sane? why is it different for all the cars?
       lkas_control_bit = self.lkas_control_bit_prev
       if CS.out.vEgo > self.CP.minSteerSpeed:
-        lkas_control_bit = True
+        lkas_control_bit = CC.enabled
       elif self.CP.flags & ChryslerFlags.HIGHER_MIN_STEERING_SPEED:
         if CS.out.vEgo < (self.CP.minSteerSpeed - 3.0):
           lkas_control_bit = False
@@ -62,7 +62,7 @@ class CarController:
         # TODO: Chrysler 200 appears to support asymmetric down to mid-13s, Cherokee not verified yet, model-year variances likely
         # TODO: Consolidate with HIGHER_MIN_STEERING_SPEED cars if we can make engage consistently work at 17.5 m/s
         if CS.out.vEgo < 16.5:
-          lkas_control_bit = False
+          lkas_control_bit = CC.enabled
 
       # EPS faults if LKAS re-enables too quickly
       lkas_control_bit = lkas_control_bit and (self.frame - self.last_lkas_falling_edge > 200)
