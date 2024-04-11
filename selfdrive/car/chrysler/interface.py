@@ -53,7 +53,7 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 1747
       ret.wheelbase = 2.70
       ret.steerRatio = 17  # TODO: verify against params learner
-      ret.minSteerSpeed = 17.5  # 19' CHerokee KL Tested, Works
+      ret.minSteerSpeed = 0  # 19' CHerokee KL Tested, Works// testing wp
       ret.steerActuatorDelay = 0.2
       #19' Cherokee KL Tested, Works - Enabling PID-based lateral tuning
             #Disable with intent to enable Lateral PID Tuning with same parameters as other Chryslers
