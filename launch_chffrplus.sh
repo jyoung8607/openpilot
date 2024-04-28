@@ -86,7 +86,7 @@ function launch {
   if [ ! -f $DIR/prebuilt ]; then
     ./build.py
   fi
-  ./manager.py
+  ./manager.py > /tmp/log-$(date -Iseconds)
 
   # if broken, keep on screen error
   while true; do sleep 1; done
