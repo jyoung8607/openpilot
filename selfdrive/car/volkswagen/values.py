@@ -272,7 +272,7 @@ class CAR(Platforms):
       VWCarDocs("Volkswagen Tiguan 2018-24"),
       VWCarDocs("Volkswagen Tiguan eHybrid 2021-23"),
     ],
-    VolkswagenCarSpecs(mass=1715, wheelbase=2.74),
+    VolkswagenCarSpecs(mass=1715, wheelbase=2.9),
   )
   VOLKSWAGEN_TOURAN_MK2 = VolkswagenMQBPlatformConfig( # Chassis 1T
     [VWCarDocs("Volkswagen Touran 2016-23")],
