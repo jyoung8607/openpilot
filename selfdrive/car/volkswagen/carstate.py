@@ -65,11 +65,16 @@ class CarState(CarStateBase):
       ret.leftBlinker = bool(pt_cp.vl["Blinkmodi_01"]["BM_links"])
       ret.rightBlinker = bool(pt_cp.vl["Blinkmodi_01"]["BM_rechts"])
 
-      # ACC okay but disabled (1), ACC ready (2), a radar visibility or other fault/disruption (6 or 7)
+      # For ACC_05/ACC_Status_ACC (3 bits signal): ACC okay but disabled (1), ACC ready (2), a radar visibility or other fault/disruption (6 or 7)
       # currently regulating speed (3), driver accel override (4), brake only (5)
-      ret.cruiseState.available = pt_cp.vl["ACC_05"]["ACC_Status_ACC"] in (2, 3, 4, 5)
-      ret.cruiseState.enabled = pt_cp.vl["ACC_05"]["ACC_Status_ACC"] in (3, 4, 5)
-      ret.accFaulted = pt_cp.vl["ACC_05"]["ACC_Status_ACC"] in (6, 7)
+      # For TSK_05/TSK_Status_GRA_ACC_01 (2 bits signal): 
+      #   nicht_verbaut_kein_ACC_zulaessig (off) = 0, 
+      #   GRA_ACC_vom_Fahrer_uebersteuert (override) = 2,
+      #   GRA_ACC_aktiv (active) = 1,
+      #   Fault??? = 3???  TODO, unknown
+      ret.cruiseState.available = pt_cp.vl["TSK_05"]["TSK_Status_GRA_ACC_01"] in (0, 1, 2) #in (2, 3, 4, 5)
+      ret.cruiseState.enabled = pt_cp.vl["TSK_05"]["TSK_Status_GRA_ACC_01"] in (1, 2)  #in (3, 4, 5)
+      ret.accFaulted = pt_cp.vl["TSK_05"]["TSK_Status_GRA_ACC_01"] in (3) #TODO: validate what this value means
 
       self.gra_stock_values = pt_cp.vl["LS_01"]
 
@@ -159,7 +164,7 @@ class CarState(CarStateBase):
 
     # Update seatbelt fastened status.
     # FIXME: disabled for Macan testing
-    #ret.seatbeltUnlatched = pt_cp.vl["Airbag_02"]["AB_Gurtschloss_FA"] != 3
+    ret.seatbeltUnlatched = pt_cp.vl["Airbag_02"]["AB_Gurtschloss_FA"] != 3
 
     # Consume blind-spot monitoring info/warning LED states, if available.
     # Infostufe: BSM LED on, Warnung: BSM LED flashing
@@ -374,13 +379,13 @@ class CarState(CarStateBase):
       ("LS_01", 5),         # From J533 CAN gateway (via LIN from steering wheel controls)
       # FIXME: Testing using radar state instead of TSK state for Macan
       #("TSK_02", 33),       # From J623 Engine control module
-      ("ACC_05", 50),       # Macan test: from radar
+      ("TSK_05", 50),       # Macan test: from radar
       # FIXME: Macan gateway and airbag state on powertrain
       #("Airbag_02", 5),     # From J234 Airbag control module
-      #("Gateway_05", 10),   # From J533 CAN gateway (aggregated data)
-      ("Kombi_01", 2),      # From J285 Instrument cluster
+      ("Gateway_05", 10),   # From J533 CAN gateway (aggregated data)
+      ("Kombi_01", 20),      # From J285 Instrument cluster
       ("Blinkmodi_01", 0),  # From J519 BCM (sent at 1Hz when no lights active, 50Hz when active)
-      ("Kombi_03", 0),      # From J285 instrument cluster (not present on older cars, 1Hz when present)
+      ("Kombi_03", 1),      # From J285 instrument cluster (not present on older cars, 1Hz when present)
     ]
 
     # TODO: gear shift parsing
