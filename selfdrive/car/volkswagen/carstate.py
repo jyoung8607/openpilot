@@ -164,7 +164,7 @@ class CarState(CarStateBase):
 
     # Update seatbelt fastened status.
     # FIXME: disabled for Macan testing
-    ret.seatbeltUnlatched = pt_cp.vl["Airbag_02"]["AB_Gurtschloss_FA"] != 3
+    # ret.seatbeltUnlatched = pt_cp.vl["Airbag_02"]["AB_Gurtschloss_FA"] != 3
 
     # Consume blind-spot monitoring info/warning LED states, if available.
     # Infostufe: BSM LED on, Warnung: BSM LED flashing
@@ -381,7 +381,7 @@ class CarState(CarStateBase):
       #("TSK_02", 33),       # From J623 Engine control module
       ("TSK_05", 50),       # Macan test: from radar
       # FIXME: Macan gateway and airbag state on powertrain
-      ("Airbag_02", 5),     # From J234 Airbag control module
+      #("Airbag_02", 5),     # From J234 Airbag control module
       ("Gateway_05", 10),   # From J533 CAN gateway (aggregated data)
       ("Kombi_01", 20),      # From J285 Instrument cluster
       ("Blinkmodi_01", 0),  # From J519 BCM (sent at 1Hz when no lights active, 50Hz when active)
