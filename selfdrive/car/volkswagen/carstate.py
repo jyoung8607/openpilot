@@ -381,7 +381,7 @@ class CarState(CarStateBase):
       #("TSK_02", 33),       # From J623 Engine control module
       ("TSK_05", 50),       # Macan test: from radar
       # FIXME: Macan gateway and airbag state on powertrain
-      #("Airbag_02", 5),     # From J234 Airbag control module
+      ("Airbag_02", 5),     # From J234 Airbag control module
       ("Gateway_05", 10),   # From J533 CAN gateway (aggregated data)
       ("Kombi_01", 20),      # From J285 Instrument cluster
       ("Blinkmodi_01", 0),  # From J519 BCM (sent at 1Hz when no lights active, 50Hz when active)
@@ -418,7 +418,6 @@ class CarState(CarStateBase):
       ("Lenkwinkel_1", 100),  # From J500 Steering Assist with integrated sensors
       ("Motor_3", 100),     # From J623 Engine control module
       ("Airbag_1", 50),     # From J234 Airbag control module
-      ("Airbag_2", 50),     # From J234 Airbag control module
       ("Bremse_5", 50),     # From J104 ABS/ESP controller
       ("GRA_Neu", 50),      # From J??? steering wheel control buttons
       ("Kombi_1", 50),      # From J285 Instrument cluster
