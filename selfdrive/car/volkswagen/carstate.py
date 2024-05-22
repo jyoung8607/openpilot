@@ -385,7 +385,7 @@ class CarState(CarStateBase):
       # FIXME: Macan gateway and airbag state on powertrain
       #("Airbag_02", 5),     # From J234 Airbag control module
       ("Gateway_05", 10),   # From J533 CAN gateway (aggregated data)
-      ("Kombi_01", 20),      # From J285 Instrument cluster
+      ("EPB_01", 50),      # From J285 Instrument cluster - FIXME: Macan
       ("Blinkmodi_01", 0),  # From J519 BCM (sent at 1Hz when no lights active, 50Hz when active)
       ("Kombi_03", 1),      # From J285 instrument cluster (not present on older cars, 1Hz when present)
     ]
