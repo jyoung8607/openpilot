@@ -160,7 +160,9 @@ class CarState(CarStateBase):
     ret.brake = pt_cp.vl["ESP_05"]["ESP_Bremsdruck"] / 250.0  # FIXME: this is pressure in Bar, not sure what OP expects
     brake_pressure_detected = bool(pt_cp.vl["ESP_05"]["ESP_Fahrer_bremst"])
     ret.brakePressed = brake_pedal_pressed or brake_pressure_detected
-    ret.parkingBrake = bool(pt_cp.vl["Kombi_01"]["KBI_Handbremse"])
+    #FIXME: for macan testing, need to validate
+    ret.parkingBrake = bool(pt_cp.vl["EPB_01"]["EPB_Status"])
+    #ret.parkingBrake = bool(pt_cp.vl["Kombi_01"]["KBI_Handbremse"])
 
     # Update seatbelt fastened status.
     # FIXME: disabled for Macan testing
