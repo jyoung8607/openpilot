@@ -74,7 +74,7 @@ class CarState(CarStateBase):
       #   Fault??? = 3???  TODO, unknown
       ret.cruiseState.available = pt_cp.vl["TSK_05"]["TSK_Status_GRA_ACC_01"] in (0, 1, 2) #in (2, 3, 4, 5)
       ret.cruiseState.enabled = pt_cp.vl["TSK_05"]["TSK_Status_GRA_ACC_01"] in (1, 2)  #in (3, 4, 5)
-      ret.accFaulted = pt_cp.vl["TSK_05"]["TSK_Status_GRA_ACC_01"] in (3) #TODO: validate what this value means
+      ret.accFaulted = pt_cp.vl["TSK_05"]["TSK_Status_GRA_ACC_01"] == 3 #TODO: validate what this value means
 
       self.gra_stock_values = pt_cp.vl["LS_01"]
 
