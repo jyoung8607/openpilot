@@ -3,7 +3,7 @@
   url = ../../commaai/panda.git
 [submodule "opendbc"]
   path = opendbc
-  url = ../../commaai/opendbc.git
+  url = ../../colortrekninja/opendbc.git
 [submodule "cereal"]
   path = cereal
   url = ../../commaai/cereal.git
