@@ -63,9 +63,9 @@ class CAR(Platforms):
   )
 
   # Jeep
-  JEEP_CHEROKEE_5TH_GEN = ChryslerPlatformConfig(
+  JEEP_CHEROKEE_5TH_GEN = ChryslerPlatformConfig( # Tested JCG5 MY 2019
     [ChryslerCarDocs("Jeep Cherokee 2019-23")],
-    ChryslerCarSpecs(mass=1747., wheelbase=2.70, steerRatio=17.0, minSteerSpeed=18.5),
+    ChryslerCarSpecs(mass=1747., wheelbase=2.70, steerRatio=17.0, minSteerSpeed=14),
     dbc_dict('chrysler_cusw', None),
   )
   JEEP_GRAND_CHEROKEE = ChryslerPlatformConfig(  # includes 2017 Trailhawk
@@ -111,7 +111,7 @@ class CarControllerParams:
     elif CP.carFingerprint in CUSW_CARS:
       self.STEER_DELTA_UP = 4
       self.STEER_DELTA_DOWN = 4
-      self.STEER_MAX = 250  # TODO: re-validate this, Panda is at 261
+      self.STEER_MAX = 255   # Tested JCG5 MY 2019 - Upper Limit at 255
     else:
       self.STEER_DELTA_UP = 3
       self.STEER_DELTA_DOWN = 3
