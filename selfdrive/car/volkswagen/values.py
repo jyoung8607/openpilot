@@ -83,7 +83,7 @@ class CarControllerParams:
         self.STEER_DELTA_DOWN = 10  # Min HCA reached in 0.60s (STEER_MAX / (50Hz * 0.60))
 
         # TODO: populate shifter enums
-        self.shifter_values = None
+        self.shifter_values = can_define.dv["Getriebe_03"]["GE_Waehlhebel"]
         self.BUTTONS = [
           Button(car.CarState.ButtonEvent.Type.setCruise, "LS_01", "LS_Tip_Setzen", [1]),
           Button(car.CarState.ButtonEvent.Type.resumeCruise, "LS_01", "LS_Tip_Wiederaufnahme", [1]),
