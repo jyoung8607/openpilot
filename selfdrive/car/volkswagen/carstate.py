@@ -53,7 +53,8 @@ class CarState(CarStateBase):
       ret.espDisabled = pt_cp.vl["ESP_01"]["ESP_Tastung_passiv"] != 0
 
       # Gearshift signal
-      ret.gearShifter = self.parse_gear_shifter(str(self.CCP.shifter_values.get(pt_cp.vl["Getriebe_03"]["GE_Waehlhebel"], None)).replace('Position ', ''))
+      print(str(self.CCP.shifter_values.get(pt_cp.vl["Getriebe_03"]["GE_Waehlhebel"], 'P')))
+      ret.gearShifter = self.parse_gear_shifter(str(self.CCP.shifter_values.get(pt_cp.vl["Getriebe_03"]["GE_Waehlhebel"], 'D')).replace('Position ', ''))
 
       # TODO: this is only present on powertrain
       #ret.doorOpen = any([pt_cp.vl["Gateway_05"]["FT_Tuer_geoeffnet"],
