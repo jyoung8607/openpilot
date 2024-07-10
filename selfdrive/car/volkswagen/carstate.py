@@ -55,7 +55,8 @@ class CarState(CarStateBase):
       # Gearshift signal
       print(str(self.CCP.shifter_values.get(pt_cp.vl["Getriebe_03"]["GE_Waehlhebel"], 'P')))
       ret.gearShifter = self.parse_gear_shifter(str(self.CCP.shifter_values.get(pt_cp.vl["Getriebe_03"]["GE_Waehlhebel"], 'D')).replace('Position ', ''))
-
+      ret.gearShifter = GearShifter.drive
+      
       # TODO: this is only present on powertrain
       #ret.doorOpen = any([pt_cp.vl["Gateway_05"]["FT_Tuer_geoeffnet"],
       #                    pt_cp.vl["Gateway_05"]["BT_Tuer_geoeffnet"],
