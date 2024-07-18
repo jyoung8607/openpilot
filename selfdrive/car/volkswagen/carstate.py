@@ -54,7 +54,7 @@ class CarState(CarStateBase):
 
       # Gearshift signal
       # TODO: alternatives to string parsing? edit parse_gear_shifter or edit DBC string values
-      ret.gearShifter = self.parse_gear_shifter(str(self.CCP.shifter_values.get(pt_cp.vl["Getriebe_03"]["GE_Waehlhebel"], GearShifter.None)).replace('POSITION_', ''))
+      ret.gearShifter = self.parse_gear_shifter(str(self.CCP.shifter_values.get(pt_cp.vl["Getriebe_03"]["GE_Waehlhebel"], "P")).replace('POSITION_', ''))
       
       # TODO: this is only present on powertrain
       #ret.doorOpen = any([pt_cp.vl["Gateway_05"]["FT_Tuer_geoeffnet"],
