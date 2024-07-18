@@ -53,9 +53,8 @@ class CarState(CarStateBase):
       ret.espDisabled = pt_cp.vl["ESP_01"]["ESP_Tastung_passiv"] != 0
 
       # Gearshift signal
-      print(str(self.CCP.shifter_values.get(pt_cp.vl["Getriebe_03"]["GE_Waehlhebel"], 'P')))
-      ret.gearShifter = self.parse_gear_shifter(str(self.CCP.shifter_values.get(pt_cp.vl["Getriebe_03"]["GE_Waehlhebel"], 'D')).replace('Position ', ''))
-      ret.gearShifter = GearShifter.drive
+      # TODO: alternatives to string parsing? edit parse_gear_shifter or edit DBC string values
+      ret.gearShifter = self.parse_gear_shifter(str(self.CCP.shifter_values.get(pt_cp.vl["Getriebe_03"]["GE_Waehlhebel"], GearShifter.None)).replace('POSITION_', ''))
       
       # TODO: this is only present on powertrain
       #ret.doorOpen = any([pt_cp.vl["Gateway_05"]["FT_Tuer_geoeffnet"],
