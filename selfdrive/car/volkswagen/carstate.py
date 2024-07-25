@@ -55,12 +55,12 @@ class CarState(CarStateBase):
       # Gearshift signal
       # TODO: alternatives to string parsing? edit parse_gear_shifter or edit DBC string values
       ret.gearShifter = self.parse_gear_shifter(str(self.CCP.shifter_values.get(pt_cp.vl["Getriebe_03"]["GE_Waehlhebel"], "P")).replace('POSITION_', ''))
-      
+
       # TODO: this is only present on powertrain
-      #ret.doorOpen = any([pt_cp.vl["Gateway_05"]["FT_Tuer_geoeffnet"],
-      #                    pt_cp.vl["Gateway_05"]["BT_Tuer_geoeffnet"],
-      #                    pt_cp.vl["Gateway_05"]["HL_Tuer_geoeffnet"],
-      #                    pt_cp.vl["Gateway_05"]["HR_Tuer_geoeffnet"]])
+      ret.doorOpen = any([pt_cp.vl["Gateway_05"]["FT_Tuer_geoeffnet"],
+                          pt_cp.vl["Gateway_05"]["BT_Tuer_geoeffnet"],
+                          pt_cp.vl["Gateway_05"]["HL_Tuer_geoeffnet"],
+                          pt_cp.vl["Gateway_05"]["HR_Tuer_geoeffnet"]])
 
       # TODO: is this the instantaneous or the comfort blink signal?
       ret.leftBlinker = bool(pt_cp.vl["Blinkmodi_01"]["BM_links"])
@@ -376,6 +376,7 @@ class CarState(CarStateBase):
       #("TSK_02", 33),       # From J623 Engine control module
       # FIXME: Macan gateway and airbag state on powertrain
       #("Airbag_02", 5),     # From J234 Airbag control module
+      ("Gateway_05", 10),   #
       ("Gateway_06", 10),   # TODO: what is source of this signal?
       ("Kombi_01", 2),      # From J285 Instrument cluster
       ("Blinkmodi_01", 0),  # From J519 BCM (sent at 1Hz when no lights active, 50Hz when active)
