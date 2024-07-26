@@ -72,7 +72,7 @@ class CarControllerParams:
       }
 
     else:
-      self.LDW_STEP = 10                  # LDW_02 message frequency 10Hz
+      self.LDW_STEP = 4                  # LDW_02 message frequency 10Hz
       self.ACC_HUD_STEP = 6               # ACC_02 message frequency 16Hz
 
       self.hca_status_values = can_define.dv["LH_EPS_03"]["EPS_HCA_Status"]
