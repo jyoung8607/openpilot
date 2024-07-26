@@ -72,7 +72,7 @@ class CarControllerParams:
       }
 
     else:
-      self.LDW_STEP = 10                  # LDW_02 message frequency 10Hz
+      self.LDW_STEP = 4                  # LDW_02 message frequency 10Hz
       self.ACC_HUD_STEP = 6               # ACC_02 message frequency 16Hz
 
       self.hca_status_values = can_define.dv["LH_EPS_03"]["EPS_HCA_Status"]
@@ -83,7 +83,7 @@ class CarControllerParams:
         self.STEER_DELTA_DOWN = 10  # Min HCA reached in 0.60s (STEER_MAX / (50Hz * 0.60))
 
         # TODO: populate shifter enums
-        self.shifter_values = None
+        self.shifter_values = can_define.dv["Getriebe_03"]["GE_Waehlhebel"]
         self.BUTTONS = [
           Button(car.CarState.ButtonEvent.Type.setCruise, "LS_01", "LS_Tip_Setzen", [1]),
           Button(car.CarState.ButtonEvent.Type.resumeCruise, "LS_01", "LS_Tip_Wiederaufnahme", [1]),
