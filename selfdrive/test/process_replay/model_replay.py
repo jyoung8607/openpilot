@@ -50,7 +50,7 @@ def get_event(logs, event):
 def zl(array, fill):
   return zip_longest(array, [], fillvalue=fill)
 
-def generate_report(proposed, master, tmp):
+def generate_report(proposed, master, tmp, commit):
   ModelV2_Plots = zl([
                      (lambda x: x.velocity.x[0], "velocity.x"),
                      (lambda x: x.action.desiredCurvature, "desiredCurvature"),
@@ -58,10 +58,18 @@ def generate_report(proposed, master, tmp):
                      (lambda x: x.laneLines[1].y[0], "laneLines.y"),
                      (lambda x: x.meta.disengagePredictions.gasPressProbs[1], "gasPressProbs")
                     ], "modelV2")
+  DriverStateV2_Plots = zl([
+                     (lambda x: x.wheelOnRightProb, "wheelOnRightProb"),
+                     (lambda x: x.leftDriverData.faceProb, "leftDriverData.faceProb"),
+                     (lambda x: x.leftDriverData.faceOrientation[0], "leftDriverData.faceOrientation0"),
+                     (lambda x: x.leftDriverData.leftBlinkProb, "leftDriverData.leftBlinkProb"),
+                     (lambda x: x.leftDriverData.notReadyProb[0], "leftDriverData.notReadyProb0"),
+                     (lambda x: x.rightDriverData.faceProb, "rightDriverData.faceProb"),
+                    ], "driverStateV2")
 
   return [plot(map(v[0], get_event(proposed, event)), \
-               map(v[0], get_event(master, event)), v[1], tmp) \
-               for v,event in [*ModelV2_Plots]]
+               map(v[0], get_event(master, event)), f"{v[1]}_{commit[:7]}", tmp) \
+               for v,event in ([*ModelV2_Plots] + [*DriverStateV2_Plots])]
 
 def create_table(title, files, link, open_table=False):
   if not files:
@@ -82,11 +90,17 @@ def comment_replay_report(proposed, master, full_logs):
     PR_BRANCH = os.getenv("GIT_BRANCH","")
     DATA_BUCKET = f"model_replay_{PR_BRANCH}"
 
-    files = generate_report(proposed, master, tmp)
+    try:
+      GITHUB.get_pr_number(PR_BRANCH)
+    except Exception:
+      print("No PR associated with this branch. Skipping report.")
+      return
+
+    commit = get_commit()
+    files = generate_report(proposed, master, tmp, commit)
 
     GITHUB.upload_files(DATA_BUCKET, [(x[0], tmp + '/' + x[0]) for x in files])
 
-    commit = get_commit()
     log_name = get_log_fn(TEST_ROUTE, commit)
     save_log(log_name, full_logs)
     GITHUB.upload_file(DATA_BUCKET, os.path.basename(log_name), log_name)
