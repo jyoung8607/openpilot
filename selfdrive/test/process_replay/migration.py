@@ -1,19 +1,20 @@
 from collections import defaultdict
 from collections.abc import Callable
-import functools
 import capnp
+import functools
+import traceback
 
 from cereal import messaging, car, log
 from opendbc.car.fingerprints import MIGRATION
-from opendbc.car.toyota.values import EPS_SCALE
-from opendbc.car.ford.values import CAR as FORD, FordFlags
+from opendbc.car.toyota.values import EPS_SCALE, ToyotaSafetyFlags
+from opendbc.car.ford.values import CAR as FORD, FordFlags, FordSafetyFlags
+from opendbc.car.hyundai.values import HyundaiSafetyFlags
 from openpilot.selfdrive.modeld.constants import ModelConstants
 from openpilot.selfdrive.modeld.fill_model_msg import fill_xyz_poly, fill_lane_line_meta
 from openpilot.selfdrive.test.process_replay.vision_meta import meta_from_encode_index
 from openpilot.selfdrive.controls.lib.longitudinal_planner import get_accel_from_plan
 from openpilot.system.manager.process_config import managed_processes
 from openpilot.tools.lib.logreader import LogIterable
-from panda import Panda
 
 MessageWithIndex = tuple[int, capnp.lib.capnp._DynamicStructReader]
 MigrationOps = tuple[list[tuple[int, capnp.lib.capnp._DynamicStructReader]], list[capnp.lib.capnp._DynamicStructReader], list[int]]
@@ -107,7 +108,8 @@ def migrate_longitudinalPlan(msgs):
     if msg.which() != 'longitudinalPlan':
       continue
     new_msg = msg.as_builder()
-    new_msg.longitudinalPlan.aTarget, new_msg.longitudinalPlan.shouldStop = get_accel_from_plan(msg.longitudinalPlan.speeds, msg.longitudinalPlan.accels)
+    a_target, should_stop = get_accel_from_plan(msg.longitudinalPlan.speeds, msg.longitudinalPlan.accels)
+    new_msg.longitudinalPlan.aTarget, new_msg.longitudinalPlan.shouldStop = float(a_target), bool(should_stop)
     ops.append((index, new_msg.as_reader()))
   return ops, [], []
 
@@ -267,19 +269,19 @@ def migrate_carOutput(msgs):
 def migrate_pandaStates(msgs):
   # TODO: safety param migration should be handled automatically
   safety_param_migration = {
-    "TOYOTA_PRIUS": EPS_SCALE["TOYOTA_PRIUS"] | Panda.FLAG_TOYOTA_STOCK_LONGITUDINAL,
-    "TOYOTA_RAV4": EPS_SCALE["TOYOTA_RAV4"] | Panda.FLAG_TOYOTA_ALT_BRAKE,
-    "KIA_EV6": Panda.FLAG_HYUNDAI_EV_GAS | Panda.FLAG_HYUNDAI_CANFD_HDA2,
+    "TOYOTA_PRIUS": EPS_SCALE["TOYOTA_PRIUS"] | ToyotaSafetyFlags.STOCK_LONGITUDINAL,
+    "TOYOTA_RAV4": EPS_SCALE["TOYOTA_RAV4"] | ToyotaSafetyFlags.ALT_BRAKE,
+    "KIA_EV6": HyundaiSafetyFlags.EV_GAS | HyundaiSafetyFlags.CANFD_LKA_STEERING,
   }
   # TODO: get new Ford route
-  safety_param_migration |= {car: Panda.FLAG_FORD_LONG_CONTROL for car in (set(FORD) - FORD.with_flags(FordFlags.CANFD))}
+  safety_param_migration |= {car: FordSafetyFlags.LONG_CONTROL for car in (set(FORD) - FORD.with_flags(FordFlags.CANFD))}
 
   # Migrate safety param base on carParams
   CP = next((m.carParams for _, m in msgs if m.which() == 'carParams'), None)
   assert CP is not None, "carParams message not found"
   fingerprint = MIGRATION.get(CP.carFingerprint, CP.carFingerprint)
   if fingerprint in safety_param_migration:
-    safety_param = safety_param_migration[fingerprint]
+    safety_param = safety_param_migration[fingerprint].value
   elif len(CP.safetyConfigs):
     safety_param = CP.safetyConfigs[0].safetyParam
     if CP.safetyConfigs[0].safetyParamDEPRECATED != 0:
@@ -356,6 +358,7 @@ def migrate_cameraStates(msgs):
 
     new_msg = messaging.new_message(msg.which())
     new_camera_state = getattr(new_msg, new_msg.which())
+    new_camera_state.sensor = camera_state.sensor
     new_camera_state.frameId = encode_id
     new_camera_state.encodeId = encode_id
     # timestampSof was added later so it might be missing on some old segments
@@ -379,7 +382,7 @@ def migrate_carParams(msgs):
     CP = msg.as_builder()
     CP.carParams.carFingerprint = MIGRATION.get(CP.carParams.carFingerprint, CP.carParams.carFingerprint)
     for car_fw in CP.carParams.carFw:
-      car_fw.brand = CP.carParams.carName
+      car_fw.brand = CP.carParams.brand
     ops.append((index, CP.as_reader()))
   return ops, [], []
 
@@ -424,13 +427,19 @@ def migrate_sensorEvents(msgs):
 def migrate_onroadEvents(msgs):
   ops = []
   for index, msg in msgs:
+    onroadEvents = []
+    for event in msg.onroadEventsDEPRECATED:
+      try:
+        if not str(event.name).endswith('DEPRECATED'):
+          # dict converts name enum into string representation
+          onroadEvents.append(log.OnroadEvent(**event.to_dict()))
+      except RuntimeError:  # Member was null
+        traceback.print_exc()
+
     new_msg = messaging.new_message('onroadEvents', len(msg.onroadEventsDEPRECATED))
     new_msg.valid = msg.valid
     new_msg.logMonoTime = msg.logMonoTime
-
-    # dict converts name enum into string representation
-    new_msg.onroadEvents = [log.OnroadEvent(**event.to_dict()) for event in msg.onroadEventsDEPRECATED if
-                            not str(event.name).endswith('DEPRECATED')]
+    new_msg.onroadEvents = onroadEvents
     ops.append((index, new_msg.as_reader()))
 
   return ops, [], []
@@ -441,10 +450,16 @@ def migrate_driverMonitoringState(msgs):
   ops = []
   for index, msg in msgs:
     msg = msg.as_builder()
-    # dict converts name enum into string representation
-    msg.driverMonitoringState.events = [log.OnroadEvent(**event.to_dict()) for event in
-                                        msg.driverMonitoringState.eventsDEPRECATED if
-                                        not str(event.name).endswith('DEPRECATED')]
+    events = []
+    for event in msg.driverMonitoringState.eventsDEPRECATED:
+      try:
+        if not str(event.name).endswith('DEPRECATED'):
+          # dict converts name enum into string representation
+          events.append(log.OnroadEvent(**event.to_dict()))
+      except RuntimeError:  # Member was null
+        traceback.print_exc()
+
+    msg.driverMonitoringState.events = events
     ops.append((index, msg.as_reader()))
 
   return ops, [], []

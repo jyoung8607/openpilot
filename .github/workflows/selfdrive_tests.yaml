@@ -64,15 +64,7 @@ jobs:
       timeout-minutes: 1
       run: |
         cd $STRIPPED_DIR
-        ${{ env.RUN }} "release/check-dirty.sh && \
-                        MAX_EXAMPLES=5 $PYTEST -m 'not slow' selfdrive/car system/manager"
-    - name: Static analysis
-      timeout-minutes: 1
-      run: |
-        cd $GITHUB_WORKSPACE
-        cp pyproject.toml $STRIPPED_DIR
-        cd $STRIPPED_DIR
-        ${{ env.RUN }} "scripts/lint/lint.sh --skip check_added_large_files"
+        ${{ env.RUN }} "release/check-dirty.sh"
 
   build:
     runs-on:
@@ -235,7 +227,7 @@ jobs:
     - name: Build openpilot
       run: ${{ env.RUN }} "scons -j$(nproc)"
     - name: Test car models
-      timeout-minutes: ${{ contains(runner.name, 'nsc') && (steps.routes-cache.outputs.cache-hit == 'true') && 1 || 20 }}
+      timeout-minutes: ${{ contains(runner.name, 'nsc') && (steps.routes-cache.outputs.cache-hit == 'true') && 1 || 6 }}
       run: |
         ${{ env.RUN }} "MAX_EXAMPLES=1 $PYTEST selfdrive/car/tests/test_models.py && \
                         chmod -R 777 /tmp/comma_download_cache"
@@ -323,7 +315,7 @@ jobs:
       run: |
         ${{ env.RUN }} "source selfdrive/test/setup_xvfb.sh && \
                         source selfdrive/test/setup_vsound.sh && \
-                        CI=1 pytest tools/sim/tests/test_metadrive_bridge.py"
+                        CI=1 pytest -s tools/sim/tests/test_metadrive_bridge.py"
 
   create_ui_report:
     # This job name needs to be the same as UI_JOB_NAME in ui_preview.yaml

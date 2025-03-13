@@ -21,14 +21,14 @@ public:
   };
 
   SegmentManager(const std::string &route_name, uint32_t flags, const std::string &data_dir = "")
-      : flags_(flags), route_(route_name, data_dir) {};
+      : flags_(flags), route_(route_name, data_dir), event_data_(std::make_shared<EventData>()) {}
   ~SegmentManager();
 
   bool load();
   void setCurrentSegment(int seg_num);
   void setCallback(const std::function<void()> &callback) { onSegmentMergedCallback_ = callback; }
   void setFilters(const std::vector<bool> &filters) { filters_ = filters; }
-  const std::shared_ptr<EventData> getEventData() const { return event_data_; }
+  const std::shared_ptr<EventData> getEventData() const { return std::atomic_load(&event_data_); }
   bool hasSegment(int n) const { return segments_.find(n) != segments_.end(); }
 
   Route route_;
@@ -45,7 +45,7 @@ private:
   std::mutex mutex_;
   std::condition_variable cv_;
   std::thread thread_;
-  std::atomic<int> cur_seg_num_ = -1;
+  int cur_seg_num_ = -1;
   bool needs_update_ = false;
   bool exit_ = false;
 

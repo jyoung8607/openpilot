@@ -1,8 +1,8 @@
 import math
+import numpy as np
 
 from cereal import car
 from openpilot.common.conversions import Conversions as CV
-from openpilot.common.numpy_fast import clip
 
 
 # WARNING: this value was determined based on the model's training distribution,
@@ -56,6 +56,9 @@ class VCruiseHelper:
         if CS.cruiseState.speed == 0:
           self.v_cruise_kph = V_CRUISE_UNSET
           self.v_cruise_cluster_kph = V_CRUISE_UNSET
+        elif CS.cruiseState.speed == -1:
+          self.v_cruise_kph = -1
+          self.v_cruise_cluster_kph = -1
     else:
       self.v_cruise_kph = V_CRUISE_UNSET
       self.v_cruise_cluster_kph = V_CRUISE_UNSET
@@ -106,7 +109,7 @@ class VCruiseHelper:
     if CS.gasPressed and button_type in (ButtonType.decelCruise, ButtonType.setCruise):
       self.v_cruise_kph = max(self.v_cruise_kph, CS.vEgo * CV.MS_TO_KPH)
 
-    self.v_cruise_kph = clip(round(self.v_cruise_kph, 1), V_CRUISE_MIN, V_CRUISE_MAX)
+    self.v_cruise_kph = np.clip(round(self.v_cruise_kph, 1), V_CRUISE_MIN, V_CRUISE_MAX)
 
   def update_button_timers(self, CS, enabled):
     # increment timer for buttons still pressed
@@ -130,6 +133,6 @@ class VCruiseHelper:
     if any(b.type in (ButtonType.accelCruise, ButtonType.resumeCruise) for b in CS.buttonEvents) and self.v_cruise_initialized:
       self.v_cruise_kph = self.v_cruise_kph_last
     else:
-      self.v_cruise_kph = int(round(clip(CS.vEgo * CV.MS_TO_KPH, initial, V_CRUISE_MAX)))
+      self.v_cruise_kph = int(round(np.clip(CS.vEgo * CV.MS_TO_KPH, initial, V_CRUISE_MAX)))
 
     self.v_cruise_cluster_kph = self.v_cruise_kph

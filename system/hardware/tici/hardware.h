@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdlib>
+#include <cassert>
 #include <fstream>
 #include <map>
 #include <string>
@@ -22,7 +23,7 @@ public:
 
   static std::string get_name() {
     std::string model = util::read_file("/sys/firmware/devicetree/base/model");
-    return model.substr(std::string("comma ").size());
+    return util::strip(model.substr(std::string("comma ").size()));
   }
 
   static cereal::InitData::DeviceType get_device_type() {
@@ -32,7 +33,8 @@ public:
       {"mici", cereal::InitData::DeviceType::MICI}
     };
     auto it = device_map.find(get_name());
-    return it != device_map.end() ? it->second : cereal::InitData::DeviceType::UNKNOWN;
+    assert(it != device_map.end());
+    return it->second;
   }
 
   static int get_voltage() { return std::atoi(util::read_file("/sys/class/hwmon/hwmon1/in1_input").c_str()); }
@@ -59,20 +61,11 @@ public:
   static void reboot() { std::system("sudo reboot"); }
   static void poweroff() { std::system("sudo poweroff"); }
   static void set_brightness(int percent) {
-    std::string max = util::read_file("/sys/class/backlight/panel0-backlight/max_brightness");
-
-    std::ofstream brightness_control("/sys/class/backlight/panel0-backlight/brightness");
-    if (brightness_control.is_open()) {
-      brightness_control << (int)(percent * (std::stof(max)/100.)) << "\n";
-      brightness_control.close();
-    }
+    float max = std::stof(util::read_file("/sys/class/backlight/panel0-backlight/max_brightness"));
+    std::ofstream("/sys/class/backlight/panel0-backlight/brightness") << int(percent * (max / 100.0f)) << "\n";
   }
   static void set_display_power(bool on) {
-    std::ofstream bl_power_control("/sys/class/backlight/panel0-backlight/bl_power");
-    if (bl_power_control.is_open()) {
-      bl_power_control << (on ? "0" : "4") << "\n";
-      bl_power_control.close();
-    }
+    std::ofstream("/sys/class/backlight/panel0-backlight/bl_power") << (on ? "0" : "4") << "\n";
   }
 
   static void set_ir_power(int percent) {
@@ -82,19 +75,10 @@ public:
       return;
     }
 
-    percent = std::clamp(percent, 0, 100);
-
-    std::ofstream torch_brightness("/sys/class/leds/led:torch_2/brightness");
-    if (torch_brightness.is_open()) {
-      torch_brightness << percent << "\n";
-      torch_brightness.close();
-    }
-
-    std::ofstream switch_brightness("/sys/class/leds/led:switch_2/brightness");
-    if (switch_brightness.is_open()) {
-      switch_brightness << percent << "\n";
-      switch_brightness.close();
-    }
+    int value = util::map_val(std::clamp(percent, 0, 100), 0, 100, 0, 255);
+    std::ofstream("/sys/class/leds/led:switch_2/brightness") << 0 << "\n";
+    std::ofstream("/sys/class/leds/led:torch_2/brightness") << value << "\n";
+    std::ofstream("/sys/class/leds/led:switch_2/brightness") << value << "\n";
   }
 
   static std::map<std::string, std::string> get_init_logs() {
@@ -125,11 +109,4 @@ public:
 
   static bool get_ssh_enabled() { return Params().getBool("SshEnabled"); }
   static void set_ssh_enabled(bool enabled) { Params().putBool("SshEnabled", enabled); }
-
-  static void config_cpu_rendering(bool offscreen) {
-    if (offscreen) {
-      setenv("QT_QPA_PLATFORM", "eglfs", 1); // offscreen doesn't work with EGL/GLES
-    }
-    setenv("LP_NUM_THREADS", "0", 1); // disable threading so we stay on our assigned CPU
-  }
 };

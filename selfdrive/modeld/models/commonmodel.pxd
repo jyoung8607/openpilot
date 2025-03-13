@@ -10,6 +10,7 @@ cdef extern from "common/clutil.h":
   cdef unsigned long CL_DEVICE_TYPE_DEFAULT
   cl_device_id cl_get_device_id(unsigned long)
   cl_context cl_create_context(cl_device_id)
+  void cl_release_context(cl_context)
 
 cdef extern from "selfdrive/modeld/models/commonmodel.h":
   cppclass ModelFrame:
@@ -19,7 +20,7 @@ cdef extern from "selfdrive/modeld/models/commonmodel.h":
 
   cppclass DrivingModelFrame:
     int buf_size
-    DrivingModelFrame(cl_device_id, cl_context)
+    DrivingModelFrame(cl_device_id, cl_context, int)
 
   cppclass MonitoringModelFrame:
     int buf_size

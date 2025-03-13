@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import math
+import numpy as np
 from collections import deque
 from typing import Any
 
 import capnp
 from cereal import messaging, log, car
-from openpilot.common.numpy_fast import interp
 from openpilot.common.params import Params
 from openpilot.common.realtime import DT_MDL, Priority, config_realtime_process
 from openpilot.common.swaglog import cloudlog
@@ -44,7 +44,7 @@ class KalmanParams:
           0.28144091, 0.27958406, 0.27783249, 0.27617149, 0.27458948, 0.27307714,
           0.27162685, 0.27023228, 0.26888809, 0.26758976, 0.26633338, 0.26511557,
           0.26393339, 0.26278425]
-    self.K = [[interp(dt, dts, K0)], [interp(dt, dts, K1)]]
+    self.K = [[np.interp(dt, dts, K0)], [np.interp(dt, dts, K1)]]
 
 
 class Track:
@@ -150,7 +150,7 @@ def get_RadarState_from_vision(lead_msg: capnp._DynamicStructReader, v_ego: floa
     "vRel": float(lead_v_rel_pred),
     "vLead": float(v_ego + lead_v_rel_pred),
     "vLeadK": float(v_ego + lead_v_rel_pred),
-    "aLeadK": 0.0,
+    "aLeadK": float(lead_msg.a[0]),
     "aLeadTau": 0.3,
     "fcw": False,
     "modelProb": float(lead_msg.prob),
@@ -211,9 +211,7 @@ class RadarD:
       self.v_ego_hist.append(self.v_ego)
       self.last_v_ego_frame = sm.recv_frame['carState']
 
-    ar_pts = {}
-    for pt in rr.points:
-      ar_pts[pt.trackId] = [pt.dRel, pt.yRel, pt.vRel, pt.measured]
+    ar_pts = {pt.trackId: [pt.dRel, pt.yRel, pt.vRel, pt.measured] for pt in rr.points}
 
     # *** remove missing points from meta data ***
     for ids in list(self.tracks.keys()):
