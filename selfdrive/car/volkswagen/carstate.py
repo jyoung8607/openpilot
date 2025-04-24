@@ -174,11 +174,12 @@ class CarState(CarStateBase):
     ret.cruiseState.standstill = self.CP.pcmCruise and self.esp_hold_confirmation
 
     # Update ACC setpoint. When the setpoint is zero or there's an error, the
-    # radar sends a set-speed of ~90.69 m/s / 203mph.
-    # TODO: ugly hack while testing CC-only S4
-    if self.CP.pcmCruise and not self.CP.flags & VolkswagenFlags.MLB:
+    # radar sends a set-speed of ~90.69 m/s / 203.19 mph / 327.04 kph
+    # TODO: ugly hack while testing CC-only S4, also macan.
+    # EDIT: bumping the upper limit to 100 to match the stock functionality (100 max CC set point on USA Macan)
+    if self.CP.pcmCruise:
       ret.cruiseState.speed = ext_cp.vl["ACC_02"]["ACC_Wunschgeschw_02"] * CV.KPH_TO_MS
-      if ret.cruiseState.speed > 90:
+      if ret.cruiseState.speed > 100:
         ret.cruiseState.speed = 0
 
     # Update button states for turn signals and ACC controls, capture all ACC button state/config for passthrough
@@ -380,6 +381,7 @@ class CarState(CarStateBase):
       ("Blinkmodi_01", 0),  # From J519 BCM (sent at 1Hz when no lights active, 50Hz when active)
       ("Kombi_03", 0),      # From J285 instrument cluster (not present on older cars, 1Hz when present)
       ("Getriebe_03", 50),  # TODO: what is the source of this signal?  transmission ecu?
+      ("ACC_02", 50),       # Macan test: CC speed setting
     ]
 
     # TODO: gear shift parsing
