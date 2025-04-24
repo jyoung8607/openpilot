@@ -178,7 +178,7 @@ class CarState(CarStateBase):
     # TODO: ugly hack while testing CC-only S4, also macan.
     # EDIT: bumping the upper limit to 100 to match the stock functionality (100 max CC set point on USA Macan)
     if self.CP.pcmCruise:
-      ret.cruiseState.speed = ext_cp.vl["ACC_02"]["ACC_Wunschgeschw_02"] * CV.KPH_TO_MS
+      ret.cruiseState.speed = cam_cp.vl["ACC_02"]["ACC_Wunschgeschw_02"] * CV.KPH_TO_MS
       if ret.cruiseState.speed > 100:
         ret.cruiseState.speed = 0
 
@@ -381,7 +381,6 @@ class CarState(CarStateBase):
       ("Blinkmodi_01", 0),  # From J519 BCM (sent at 1Hz when no lights active, 50Hz when active)
       ("Kombi_03", 0),      # From J285 instrument cluster (not present on older cars, 1Hz when present)
       ("Getriebe_03", 50),  # TODO: what is the source of this signal?  transmission ecu?
-      ("ACC_02", 25),       # Macan test: CC speed setting
     ]
 
     # TODO: gear shift parsing
@@ -393,6 +392,7 @@ class CarState(CarStateBase):
   def get_cam_can_parser_mlb(CP):
     messages = [
       ("ACC_05", 50),  # Macan test: from radar
+      ("ACC_02", 25),       # Macan test: CC speed setting
     ]
 
     if CP.networkLocation == NetworkLocation.fwdCamera:
