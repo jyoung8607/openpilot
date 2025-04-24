@@ -381,7 +381,7 @@ class CarState(CarStateBase):
       ("Blinkmodi_01", 0),  # From J519 BCM (sent at 1Hz when no lights active, 50Hz when active)
       ("Kombi_03", 0),      # From J285 instrument cluster (not present on older cars, 1Hz when present)
       ("Getriebe_03", 50),  # TODO: what is the source of this signal?  transmission ecu?
-      ("ACC_02", 50),       # Macan test: CC speed setting
+      ("ACC_02", 25),       # Macan test: CC speed setting
     ]
 
     # TODO: gear shift parsing
