@@ -402,6 +402,14 @@ class CAR(Platforms):
     chassis_codes={"FL"},
     wmis={WMI.AUDI_GERMANY_CAR},
   )
+  AUDI_Q5_8R = VolkswagenMLBPlatformConfig( # Chassis FL
+    [
+      VWCarDocs("Audi Q5 8R Hybrid 2011-2017"),
+      #VWCarDocs("Audi Q5 8R Facelift 2013-2017"),
+    ],
+    VolkswagenCarSpecs(mass=1840, wheelbase=2.81),
+    wmis={WMI.AUDI_GERMANY_CAR},
+  )
   AUDI_Q2_MK1 = VolkswagenMQBPlatformConfig(
     [VWCarDocs("Audi Q2 2018")],
     VolkswagenCarSpecs(mass=1205, wheelbase=2.61),
