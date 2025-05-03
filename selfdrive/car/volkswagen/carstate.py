@@ -392,7 +392,6 @@ class CarState(CarStateBase):
   def get_cam_can_parser_mlb(CP):
     messages = [
       ("ACC_05", 50),  # Macan test: from radar
-      ("ACC_02", 25),       # Macan test: CC speed setting
     ]
 
     if CP.networkLocation == NetworkLocation.fwdCamera:
