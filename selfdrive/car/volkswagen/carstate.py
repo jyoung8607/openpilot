@@ -177,8 +177,8 @@ class CarState(CarStateBase):
     # radar sends a set-speed of ~90.69 m/s / 203.19 mph / 327.04 kph
     # TODO: ugly hack while testing CC-only S4, also macan.
     # EDIT: bumping the upper limit to 100 to match the stock functionality (100 max CC set point on USA Macan)
-    if self.CP.pcmCruise:
-      ret.cruiseState.speed = cam_cp.vl["ACC_02"]["ACC_Wunschgeschw_02"] * CV.KPH_TO_MS
+    if self.CP.pcmCruise and not self.CP.flags & VolkswagenFlags.MLB:
+      ret.cruiseState.speed = ext_cp.vl["ACC_02"]["ACC_Wunschgeschw_02"] * CV.KPH_TO_MS
       if ret.cruiseState.speed > 100:
         ret.cruiseState.speed = 0
 
@@ -392,7 +392,6 @@ class CarState(CarStateBase):
   def get_cam_can_parser_mlb(CP):
     messages = [
       ("ACC_05", 50),  # Macan test: from radar
-      ("ACC_02", 25),       # Macan test: CC speed setting
     ]
 
     if CP.networkLocation == NetworkLocation.fwdCamera:
