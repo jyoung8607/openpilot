@@ -36,6 +36,7 @@ _services: dict[str, tuple] = {
   "errorLogMessage": (True, 0., 1),
   "liveCalibration": (True, 4., 4),
   "liveTorqueParameters": (True, 4., 1),
+  "liveDelay": (True, 4., 1),
   "androidLog": (True, 0.),
   "carState": (True, 100., 10),
   "carControl": (True, 100., 10),
@@ -72,7 +73,8 @@ _services: dict[str, tuple] = {
   "navThumbnail": (True, 0.),
   "qRoadEncodeIdx": (False, 20.),
   "userFlag": (True, 0., 1),
-  "microphone": (True, 10., 10),
+  "soundPressure": (True, 10., 10),
+  "rawAudioData": (False, 20.),
 
   # debug
   "uiDebug": (True, 0., 1),
