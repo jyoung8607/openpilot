@@ -955,19 +955,38 @@ FW_VERSIONS = {
   },
   CAR.PORSCHE_MACAN_MK1: {
     (Ecu.engine, 0x7e0, None): [
+      b'\xf1\x8795B906259  \xf1\x890005',
       b'\xf1\x8795B90652013\xf1\x893485',
+      b'\xf1\x8795B907551D \xf1\x890006',
+      b'\xf1\x8795B907559E \xf1\x890006',
+      b'\xf1\x8795B906259BE\xf1\x890001',
     ],
     (Ecu.transmission, 0x7e1, None): [
+      b'\xf1\x8795B927156AH\xf1\x890014',
       b'\xf1\x8795B927156CE\xf1\x890022',
+      b'\xf1\x8795B927156FG\xf1\x890005',
+      b'\xf1\x8795B927156JH\xf1\x890001',
+      b'\xf1\x8795B927156KB\xf1\x890001',
     ],
     (Ecu.srs, 0x715, None): [
+      b'\xf1\x8795B959655D \xf1\x890110\xf1\x82\x05064702D312',
       b'\xf1\x8795B959655F \xf1\x890130\xf1\x82\x05065Q033513',
+      b'\xf1\x8795B959655F \xf1\x890130\xf1\x82\x050690033514',
+      b'\xf1\x8795B959655G \xf1\x890150\xf1\x82\x0506B1033514',
+      b'\xf1\x8795B959655G \xf1\x890150\xf1\x82\x0506CJ02D417',
     ],
     (Ecu.eps, 0x712, None): [
+      b'\xf1\x8795B909144B \xf1\x890902\xf1\x82\x01m',
       b'\xf1\x8795B909144K \xf1\x891902\xf1\x82\x02\x04#\x04#',
+      b'\xf1\x8795B909144K \xf1\x891902\xf1\x82\x02\x04/\x04/',
+      #TODO: garon missing
+      b'\xf1\x8795B909144K \xf1\x891902\xf1\x82\x02\x046\x046',
     ],
     (Ecu.fwdRadar, 0x757, None): [
       b'\xf1\x8795B907567B\x00\xf1\x890800\xf1\x82108',
+      b'\xf1\x8795B907567C\x00\xf1\x890400\xf1\x82104',
+      b'\xf1\x8795B907567G\x00\xf1\x890410\xf1\x82104',
+      b'\xf1\x8795B907567H\x00\xf1\x890430\xf1\x82104',
     ],
   },
   CAR.SKODA_FABIA_MK4: {

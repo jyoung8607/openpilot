@@ -52,14 +52,15 @@ class CarState(CarStateBase):
       brake_pedal_pressed = bool(pt_cp.vl["Motor_03"]["MO_Fahrer_bremst"])
       ret.espDisabled = pt_cp.vl["ESP_01"]["ESP_Tastung_passiv"] != 0
 
-      # TODO: find gearshift signal
-      ret.gearShifter = GearShifter.drive
+      # Gearshift signal
+      # TODO: alternatives to string parsing? edit parse_gear_shifter or edit DBC string values
+      ret.gearShifter = self.parse_gear_shifter(str(self.CCP.shifter_values.get(pt_cp.vl["Getriebe_03"]["GE_Waehlhebel"], "P")).replace('POSITION_', ''))
 
       # TODO: this is only present on powertrain
-      #ret.doorOpen = any([pt_cp.vl["Gateway_05"]["FT_Tuer_geoeffnet"],
-      #                    pt_cp.vl["Gateway_05"]["BT_Tuer_geoeffnet"],
-      #                    pt_cp.vl["Gateway_05"]["HL_Tuer_geoeffnet"],
-      #                    pt_cp.vl["Gateway_05"]["HR_Tuer_geoeffnet"]])
+      ret.doorOpen = any([pt_cp.vl["Gateway_05"]["FT_Tuer_geoeffnet"],
+                          pt_cp.vl["Gateway_05"]["BT_Tuer_geoeffnet"],
+                          pt_cp.vl["Gateway_05"]["HL_Tuer_geoeffnet"],
+                          pt_cp.vl["Gateway_05"]["HR_Tuer_geoeffnet"]])
 
       # TODO: is this the instantaneous or the comfort blink signal?
       ret.leftBlinker = bool(pt_cp.vl["Blinkmodi_01"]["BM_links"])
@@ -158,8 +159,7 @@ class CarState(CarStateBase):
     ret.parkingBrake = bool(pt_cp.vl["Kombi_01"]["KBI_Handbremse"])
 
     # Update seatbelt fastened status.
-    # FIXME: disabled for Macan testing
-    #ret.seatbeltUnlatched = pt_cp.vl["Airbag_02"]["AB_Gurtschloss_FA"] != 3
+    ret.seatbeltUnlatched = pt_cp.vl["Gateway_06"]["AB_Gurtschloss_FA"] != 3
 
     # Consume blind-spot monitoring info/warning LED states, if available.
     # Infostufe: BSM LED on, Warnung: BSM LED flashing
@@ -174,11 +174,12 @@ class CarState(CarStateBase):
     ret.cruiseState.standstill = self.CP.pcmCruise and self.esp_hold_confirmation
 
     # Update ACC setpoint. When the setpoint is zero or there's an error, the
-    # radar sends a set-speed of ~90.69 m/s / 203mph.
-    # TODO: ugly hack while testing CC-only S4
+    # radar sends a set-speed of ~90.69 m/s / 203.19 mph / 327.04 kph
+    # TODO: ugly hack while testing CC-only S4, also macan.
+    # EDIT: bumping the upper limit to 100 to match the stock functionality (100 max CC set point on USA Macan)
     if self.CP.pcmCruise and not self.CP.flags & VolkswagenFlags.MLB:
       ret.cruiseState.speed = ext_cp.vl["ACC_02"]["ACC_Wunschgeschw_02"] * CV.KPH_TO_MS
-      if ret.cruiseState.speed > 90:
+      if ret.cruiseState.speed > 100:
         ret.cruiseState.speed = 0
 
     # Update button states for turn signals and ACC controls, capture all ACC button state/config for passthrough
@@ -374,12 +375,12 @@ class CarState(CarStateBase):
       ("LS_01", 5),         # From J533 CAN gateway (via LIN from steering wheel controls)
       # FIXME: Testing using radar state instead of TSK state for Macan
       #("TSK_02", 33),       # From J623 Engine control module
-      # FIXME: Macan gateway and airbag state on powertrain
-      #("Airbag_02", 5),     # From J234 Airbag control module
-      #("Gateway_05", 10),   # From J533 CAN gateway (aggregated data)
+      ("Gateway_05", 10),   # From J533 CAN gateway (aggregated data)
+      ("Gateway_06", 10),   # TODO: what is source of this signal?
       ("Kombi_01", 2),      # From J285 Instrument cluster
       ("Blinkmodi_01", 0),  # From J519 BCM (sent at 1Hz when no lights active, 50Hz when active)
       ("Kombi_03", 0),      # From J285 instrument cluster (not present on older cars, 1Hz when present)
+      ("Getriebe_03", 50),  # TODO: what is the source of this signal?  transmission ecu?
     ]
 
     # TODO: gear shift parsing

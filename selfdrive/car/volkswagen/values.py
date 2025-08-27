@@ -31,8 +31,12 @@ class CarControllerParams:
   STEER_DRIVER_FACTOR = 1                  # from dbc
 
   STEER_TIME_MAX = 360                     # Max time that EPS allows uninterrupted HCA steering control
+  STEER_TIME_BM = STEER_TIME_MAX - 120     # Attempts to mitigate the EPS max steer timer begin
   STEER_TIME_ALERT = STEER_TIME_MAX - 10   # If mitigation fails, time to soft disengage before EPS timer expires
+  STEER_LOW_TORQUE = STEER_MAX * 0.2       # Steer timer mitigation performed when torque output under 20%
+  STEER_TIME_LOW_TORQUE = 0.5              # Wait for this duration of STEER_LOW_TORQUE to begin mitigation
   STEER_TIME_STUCK_TORQUE = 1.9            # EPS limits same torque to 6 seconds, reset timer 3x within that period
+  STEER_TIME_RESET = 1.1                   # Duration of HCA disable needed for effective EPS timer reset
 
   DEFAULT_MIN_STEER_SPEED = 0.4            # m/s, newer EPS racks fault below this speed, don't show a low speed alert
 
@@ -72,7 +76,7 @@ class CarControllerParams:
       }
 
     else:
-      self.LDW_STEP = 10                  # LDW_02 message frequency 10Hz
+      self.LDW_STEP = 4                  # LDW_02 message frequency 10Hz
       self.ACC_HUD_STEP = 6               # ACC_02 message frequency 16Hz
 
       self.hca_status_values = can_define.dv["LH_EPS_03"]["EPS_HCA_Status"]
@@ -83,7 +87,7 @@ class CarControllerParams:
         self.STEER_DELTA_DOWN = 10  # Min HCA reached in 0.60s (STEER_MAX / (50Hz * 0.60))
 
         # TODO: populate shifter enums
-        self.shifter_values = None
+        self.shifter_values = can_define.dv["Getriebe_03"]["GE_Waehlhebel"]
         self.BUTTONS = [
           Button(car.CarState.ButtonEvent.Type.setCruise, "LS_01", "LS_Tip_Setzen", [1]),
           Button(car.CarState.ButtonEvent.Type.resumeCruise, "LS_01", "LS_Tip_Wiederaufnahme", [1]),
