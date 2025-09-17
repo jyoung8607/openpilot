@@ -21,6 +21,29 @@ RUN usermod -aG sudo $USER
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER $USER
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    sudo \
+    tzdata \
+    locales \
+    tar \
+    unzip \
+    xz-utils \
+    wget \
+    dbus && \
+    pulseaudio \
+    xvfb \
+    libx11-6 \
+    x11-xserver-utils \
+    gnome-screenshot \
+    python3-tk \
+    python3-dev \
+    alien \
+    rm -rf /var/lib/apt/lists/*
+
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen && \
+    dbus-uuidgen > /etc/machine-id
+
 # Add OpenCL manually
 RUN mkdir -p /tmp/opencl-driver-intel && \
     cd /tmp/opencl-driver-intel && \
@@ -42,32 +65,6 @@ RUN mkdir -p /tmp/opencl-driver-intel && \
     ldconfig -f /etc/ld.so.conf.d/libintelopenclexp.conf && \
     cd / && \
     rm -rf /tmp/opencl-driver-intel
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    sudo \
-    tzdata \
-    locales \
-    ssh \
-    pulseaudio \
-    xvfb \
-    x11-xserver-utils \
-    gnome-screenshot \
-    python3-tk \
-    python3-dev \
-    apt-utils \
-    alien \
-    unzip \
-    tar \
-    curl \
-    xz-utils \
-    dbus \
-    gcc-arm-none-eabi \
-    tmux \
-    vim \
-    libx11-6 \
-    wget && \
-    sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && locale-gen && \
-    dbus-uuidgen > /etc/machine-id
 
 COPY --chown=$USER tools/install_ubuntu_dependencies.sh /tmp/tools/
 RUN /tmp/tools/install_ubuntu_dependencies.sh && \
