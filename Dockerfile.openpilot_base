@@ -16,9 +16,6 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 ARG USER=batman
 ARG USER_UID=1001
-RUN useradd -m -s /bin/bash -u $USER_UID $USER
-RUN usermod -aG sudo $USER
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     sudo \
@@ -41,7 +38,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     locale-gen && \
-    dbus-uuidgen > /etc/machine-id
+    dbus-uuidgen > /etc/machine-id && \
+    useradd -m -s /bin/bash -u $USER_UID $USER && \
+    usermod -aG sudo $USER && \
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Add OpenCL manually
 RUN mkdir -p /tmp/opencl-driver-intel && \
