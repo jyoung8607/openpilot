@@ -34,6 +34,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gnome-screenshot \
     python3-tk \
     python3-dev \
+    scons \
     alien && \
     rm -rf /var/lib/apt/lists/*
 
