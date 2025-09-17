@@ -14,9 +14,6 @@ ENV QTWEBENGINE_DISABLE_SANDBOX=1
 ENV VIRTUAL_ENV=/home/$USER/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && locale-gen
-RUN dbus-uuidgen > /etc/machine-id
-
 ARG USER=batman
 ARG USER_UID=1001
 RUN useradd -m -s /bin/bash -u $USER_UID $USER
@@ -68,17 +65,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tmux \
     vim \
     libx11-6 \
-    wget
+    wget && \
+    sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && locale-gen && \
+    dbus-uuidgen > /etc/machine-id
 
 COPY --chown=$USER tools/install_ubuntu_dependencies.sh /tmp/tools/
-
 RUN /tmp/tools/install_ubuntu_dependencies.sh && \
     rm -rf /var/lib/apt/lists/* /tmp/* && \
     cd /usr/lib/gcc/arm-none-eabi/* && \
     rm -rf arm/ thumb/nofp thumb/v6* thumb/v8* thumb/v7+fp thumb/v7-r+fp.sp
 
-COPY --chown=$USER pyproject.toml uv.lock /home/$USER
 COPY --chown=$USER tools/install_python_dependencies.sh /home/$USER/tools/
+COPY --chown=$USER pyproject.toml uv.lock /home/$USER
 
 RUN cd /home/$USER && \
     tools/install_python_dependencies.sh && \
