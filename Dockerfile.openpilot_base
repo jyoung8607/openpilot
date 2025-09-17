@@ -66,13 +66,13 @@ RUN mkdir -p /tmp/opencl-driver-intel && \
     cd / && \
     rm -rf /tmp/opencl-driver-intel
 
-USER $USER
-COPY --chown=$USER tools/install_ubuntu_dependencies.sh /tmp/tools/
+COPY tools/install_ubuntu_dependencies.sh /tmp/tools/
 RUN /tmp/tools/install_ubuntu_dependencies.sh && \
     rm -rf /var/lib/apt/lists/* /tmp/* && \
     cd /usr/lib/gcc/arm-none-eabi/* && \
     rm -rf arm/ thumb/nofp thumb/v6* thumb/v8* thumb/v7+fp thumb/v7-r+fp.sp
 
+USER $USER
 COPY --chown=$USER tools/install_python_dependencies.sh /home/$USER/tools/
 COPY --chown=$USER pyproject.toml uv.lock /home/$USER
 
