@@ -13,6 +13,9 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Set up APT cache
+        run: sudo mkdir -p /var/cache/apt && sudo chmod 1777 /var/cache/apt
+
       - name: Cache APT state
         uses: actions/cache@v4
         with:
