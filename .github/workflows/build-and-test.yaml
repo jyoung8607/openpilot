@@ -8,7 +8,13 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
+      - name: Checkout repository
       - uses: actions/checkout@v5
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install ca-certificates locales portaudio
 
       - name: "Set up Python"
         uses: actions/setup-python@v5
