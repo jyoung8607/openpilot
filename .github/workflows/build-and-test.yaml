@@ -13,12 +13,10 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Cache APT packages
+      - name: Cache APT state
         uses: actions/cache@v4
-        permissions:
-          contents: write
         with:
-          path: /var/cache/apt/archives
+          path: /var/cache/apt
           key: ${{ runner.os }}-apt-${{ hashFiles('tools/install_ubuntu_dependencies.sh') }}
           restore-keys: |
             ${{ runner.os }}-apt-
