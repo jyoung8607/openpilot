@@ -26,8 +26,11 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Install the project
+      - name: Install Python dependencies
         run: uv sync --all-extras --dev
+
+      - name: Compile
+        run: uv run scons -j$(nproc)
 
       - name: Run tests
         run: uv run pytest selfdrive
