@@ -1,0 +1,49 @@
+name: Build and Test
+run-name: ${{ github.actor }} is learning GitHub Actions
+on: [push]
+
+jobs:
+  uv-example:
+    name: python
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: Increased mojo for actions/cache
+        run: sudo chown root /bin/tar && sudo chmod u+s /bin/tar
+
+      - name: Cache APT state
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/apt
+          key: ${{ runner.os }}-apt-${{ hashFiles('tools/install_ubuntu_dependencies.sh') }}-2
+          restore-keys: |
+            ${{ runner.os }}-apt-
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install ca-certificates locales portaudio19-dev
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: "pyproject.toml"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Install Python dependencies
+        run: uv sync --all-extras --dev
+
+#      - name: Compile
+#        run: uv run scons -j$(nproc)
+
+#      - name: Run tests
+#        run: uv run pytest selfdrive
