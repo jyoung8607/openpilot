@@ -15,6 +15,8 @@ jobs:
 
       - name: Cache APT packages
         uses: actions/cache@v4
+        permissions:
+          contents: write
         with:
           path: /var/cache/apt/archives
           key: ${{ runner.os }}-apt-${{ hashFiles('tools/install_ubuntu_dependencies.sh') }}
