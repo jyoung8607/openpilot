@@ -25,6 +25,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install ca-certificates locales portaudio19-dev
+          sudo rm -rf /var/cache/apt/archives/partial /var/cache/apt/archives/lock
 
       - name: "Set up Python"
         uses: actions/setup-python@v5
