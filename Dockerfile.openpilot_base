@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:24.04 as builder
 
 ENV PYTHONUNBUFFERED=1
 
@@ -61,6 +61,7 @@ ENV QTWEBENGINE_DISABLE_SANDBOX=1
 
 RUN dbus-uuidgen > /etc/machine-id
 
+FROM builder as openpilot_base
 ARG USER=batman
 ARG USER_UID=1001
 RUN useradd -m -s /bin/bash -u $USER_UID $USER
