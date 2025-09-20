@@ -62,12 +62,12 @@ ENV QTWEBENGINE_DISABLE_SANDBOX=1
 RUN dbus-uuidgen > /etc/machine-id
 
 ARG USER=batman
-COPY tools/install_python_dependencies.sh pyproject.toml uv.lock /home/$USER
+WORKDIR /home/$USER
+COPY tools/install_python_dependencies.sh pyproject.toml uv.lock .
 
 ENV VIRTUAL_ENV=/home/$USER/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-RUN cd /home/$USER && \
-    install_python_dependencies.sh && \
+RUN install_python_dependencies.sh && \
     rm -rf install_python_dependencies.sh pyproject.toml uv.lock .cache
 
 RUN sudo git config --global --add safe.directory /tmp/openpilot
