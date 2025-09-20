@@ -61,14 +61,21 @@ ENV QTWEBENGINE_DISABLE_SANDBOX=1
 
 RUN dbus-uuidgen > /etc/machine-id
 
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
-ENV UV_LINK_MODE=copy \
-    UV_COMPILE_BYTECODE=1
+ARG USER=batman
+ARG USER_UID=1001
+RUN useradd -m -s /bin/bash -u $USER_UID $USER
+RUN usermod -aG sudo $USER
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+USER $USER
 
-WORKDIR /home/batman/openpilot
+COPY --chown=$USER pyproject.toml uv.lock /home/$USER
+COPY --chown=$USER tools/install_python_dependencies.sh /home/$USER/tools/
 
-RUN --mount=type=cache,target=/root/.cache \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync \
-        --no-install-project
+ENV VIRTUAL_ENV=/home/$USER/.venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN cd /home/$USER && \
+    tools/install_python_dependencies.sh && \
+    rm -rf tools/ pyproject.toml uv.lock .cache
+
+USER root
+RUN sudo git config --global --add safe.directory /tmp/openpilot
